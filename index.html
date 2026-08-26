@@ -584,7 +584,9 @@ document.getElementById('hashGenBtn').addEventListener('click', async ()=>{
 /* ==================== GITHUB SYNC ==================== */
 let ghToken = null; // kept in memory only, never persisted
 
-document.getElementById('ghRepoLabel').textContent = `${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo} (${GITHUB_CONFIG.path})`;
+document.getElementById('ghRepoLabel').textContent = ghConfigured()
+  ? `${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo} (${GITHUB_CONFIG.path})`
+  : '⚠ 아직 설정되지 않음 (index.html의 GITHUB_CONFIG를 수정하세요)';
 
 function setGhStatus(state, text){
   const dot = document.getElementById('ghDot');
@@ -612,14 +614,35 @@ function ghUrl(){
 function b64EncodeUtf8(str){ return btoa(unescape(encodeURIComponent(str))); }
 function b64DecodeUtf8(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,'')))); }
 
+function ghConfigured(){
+  return GITHUB_CONFIG.owner && GITHUB_CONFIG.owner !== 'YOUR_GITHUB_USERNAME' &&
+         GITHUB_CONFIG.repo  && GITHUB_CONFIG.repo  !== 'YOUR_REPO_NAME';
+}
+
+// Reads a fetch response as text first, then parses it, instead of calling
+// res.json() directly — this avoids a cryptic "Unexpected end of JSON input"
+// crash when GitHub (or a blocked/offline request) returns an empty body.
+async function safeJson(res){
+  const text = await res.text();
+  if(!text) return null;
+  try{ return JSON.parse(text); }
+  catch(e){ throw new Error('GitHub 응답을 해석할 수 없습니다(빈 응답 또는 잘못된 형식).'); }
+}
+
 async function githubGetFile(){
-  const res = await fetch(`${ghUrl()}?ref=${GITHUB_CONFIG.branch}`, {
-    headers: { Authorization: `token ${ghToken}`, Accept:'application/vnd.github+json' }
-  });
+  let res;
+  try{
+    res = await fetch(`${ghUrl()}?ref=${GITHUB_CONFIG.branch}`, {
+      headers: { Authorization: `token ${ghToken}`, Accept:'application/vnd.github+json' }
+    });
+  }catch(networkErr){
+    throw new Error('GitHub에 연결할 수 없습니다. 인터넷 연결을 확인하거나, 지금 미리보기 화면이 아닌 실제 배포된 페이지에서 다시 시도해 주세요.');
+  }
   if(res.status === 404) return { data:null, sha:null };
   if(res.status === 401) throw new Error('토큰이 올바르지 않거나 만료되었습니다.');
-  if(!res.ok) throw new Error(`불러오기 실패 (${res.status})`);
-  const json = await res.json();
+  const json = await safeJson(res);
+  if(!res.ok) throw new Error((json && json.message) || `불러오기 실패 (${res.status})`);
+  if(!json || !json.content) throw new Error('GitHub 응답이 비어 있습니다. GITHUB_CONFIG의 owner/repo/path가 올바른지 확인해 주세요.');
   const content = b64DecodeUtf8(json.content);
   return { data: JSON.parse(content), sha: json.sha };
 }
@@ -631,17 +654,28 @@ async function githubSaveFile(payload, sha){
     branch: GITHUB_CONFIG.branch,
   };
   if(sha) body.sha = sha;
-  const res = await fetch(ghUrl(), {
-    method: 'PUT',
-    headers: { Authorization: `token ${ghToken}`, Accept:'application/vnd.github+json', 'Content-Type':'application/json' },
-    body: JSON.stringify(body)
-  });
+  let res;
+  try{
+    res = await fetch(ghUrl(), {
+      method: 'PUT',
+      headers: { Authorization: `token ${ghToken}`, Accept:'application/vnd.github+json', 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    });
+  }catch(networkErr){
+    throw new Error('GitHub에 연결할 수 없습니다. 인터넷 연결을 확인하거나, 지금 미리보기 화면이 아닌 실제 배포된 페이지에서 다시 시도해 주세요.');
+  }
   if(res.status === 401) throw new Error('토큰이 올바르지 않거나 만료되었습니다.');
-  if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || `저장 실패 (${res.status})`); }
-  return await res.json();
+  const json = await safeJson(res);
+  if(!res.ok) throw new Error((json && json.message) || `저장 실패 (${res.status})`);
+  if(!json) throw new Error('GitHub 응답이 비어 있습니다. 잠시 후 다시 시도하거나 저장소 설정을 확인해 주세요.');
+  return json;
 }
 
 function requireGhToken(){
+  if(!ghConfigured()){
+    alert('먼저 index.html 안 GITHUB_CONFIG의 owner/repo 값을 실제 저장소 정보로 바꿔주세요 (현재는 예시 값 그대로입니다).');
+    return false;
+  }
   if(!ghToken){ alert('먼저 "🔗 GitHub 연결"에서 토큰을 입력해 주세요.'); return false; }
   return true;
 }
