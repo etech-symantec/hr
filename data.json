@@ -1,1 +1,276 @@
-
+{
+  "weights": [
+    {
+      "key": "attendance",
+      "label": "근태",
+      "cls": "attendance",
+      "subs": [
+        {
+          "key": "attitude",
+          "label": "근태",
+          "weight": 4
+        },
+        {
+          "key": "domestic",
+          "label": "국내출장",
+          "weight": 0.5
+        },
+        {
+          "key": "overseas",
+          "label": "해외출장",
+          "weight": 0.5
+        }
+      ]
+    },
+    {
+      "key": "skill",
+      "label": "기술력(개인)",
+      "cls": "skill",
+      "subs": [
+        {
+          "key": "ts",
+          "label": "기술력/TS",
+          "weight": 3
+        },
+        {
+          "key": "performance",
+          "label": "실적/성과",
+          "weight": 1
+        },
+        {
+          "key": "customer",
+          "label": "고객관리",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "key": "contribution",
+      "label": "기여도",
+      "cls": "contribution",
+      "subs": [
+        {
+          "key": "initiative",
+          "label": "업무주도성/기여도",
+          "weight": 2
+        },
+        {
+          "key": "cooperation",
+          "label": "협력/지원",
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "key": "growth",
+      "label": "자기계발",
+      "cls": "growth",
+      "subs": [
+        {
+          "key": "selfdev",
+          "label": "자기계발",
+          "weight": 1
+        },
+        {
+          "key": "cert",
+          "label": "자격증",
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "key": "etc",
+      "label": "기타(팀)",
+      "cls": "etc",
+      "subs": [
+        {
+          "key": "meeting",
+          "label": "회의/정보공유",
+          "weight": 2
+        },
+        {
+          "key": "influence",
+          "label": "의사소통/영향력",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "years": {
+    "2026": [
+      {
+        "id": "878a7b9d-b122-4b27-b032-7d62d3a72eb3",
+        "name": "신호근",
+        "position": "수석",
+        "memo": "",
+        "accident": -2,
+        "totalOverride": 88.5,
+        "scores": {
+          "attendance": 10,
+          "skill": 7.6,
+          "contribution": 6,
+          "growth": 7.3,
+          "etc": 5.3
+        },
+        "subs": {
+          "attitude": 5,
+          "domestic": 5,
+          "overseas": 5,
+          "ts": 4,
+          "performance": 3,
+          "customer": 4,
+          "initiative": 5,
+          "cooperation": 1,
+          "selfdev": 1,
+          "cert": 5,
+          "meeting": 3,
+          "influence": 2
+        }
+      },
+      {
+        "id": "6d6c7e1b-28c8-411a-896c-c4bd7907e50b",
+        "name": "김상문",
+        "position": "수석",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": 56.5,
+        "scores": {
+          "attendance": 8.8,
+          "skill": 6.4,
+          "contribution": 6,
+          "growth": 4.7,
+          "etc": 4
+        },
+        "subs": {
+          "attitude": 5,
+          "domestic": 4,
+          "ts": 3,
+          "performance": 3,
+          "customer": 4,
+          "initiative": 5,
+          "cooperation": 1,
+          "selfdev": 1,
+          "cert": 3,
+          "meeting": 2,
+          "influence": 2
+        }
+      },
+      {
+        "id": "3ff41b91-dbcd-4bc4-aad7-0174d7555747",
+        "name": "홍진영",
+        "position": "책임",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": 63.5,
+        "scores": {
+          "attendance": 9,
+          "skill": 7.6,
+          "contribution": 6,
+          "growth": 2,
+          "etc": 5.3
+        },
+        "subs": {
+          "attitude": 5,
+          "domestic": 5,
+          "ts": 4,
+          "performance": 3,
+          "customer": 4,
+          "initiative": 3,
+          "cooperation": 3,
+          "selfdev": 1,
+          "cert": 1,
+          "meeting": 2,
+          "influence": 4
+        }
+      },
+      {
+        "id": "b74e0b6e-bcd7-47b1-a7e3-4d500a86c003",
+        "name": "강성준",
+        "position": "선임",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": 60,
+        "scores": {
+          "attendance": 7.4,
+          "skill": 5.2,
+          "contribution": 9,
+          "growth": 4.7,
+          "etc": 6
+        },
+        "subs": {
+          "attitude": 4,
+          "domestic": 4,
+          "overseas": 1,
+          "ts": 2,
+          "performance": 3,
+          "customer": 4,
+          "initiative": 5,
+          "cooperation": 4,
+          "selfdev": 3,
+          "cert": 2,
+          "meeting": 2,
+          "influence": 5
+        }
+      },
+      {
+        "id": "510aef31-ce94-4773-836a-3a50eefd5d6b",
+        "name": "윤태리",
+        "position": "선임",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": 63.5,
+        "scores": {
+          "attendance": 8.8,
+          "skill": 7.2,
+          "contribution": 6,
+          "growth": 2,
+          "etc": 6.7
+        },
+        "subs": {
+          "attitude": 5,
+          "domestic": 3,
+          "overseas": 1,
+          "ts": 3,
+          "performance": 4,
+          "customer": 5,
+          "initiative": 3,
+          "cooperation": 3,
+          "selfdev": 1,
+          "cert": 1,
+          "meeting": 3,
+          "influence": 4
+        }
+      },
+      {
+        "id": "f052ca20-16ff-4949-91e5-8f9900d42fd3",
+        "name": "박동식",
+        "position": "선임",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": 49,
+        "scores": {
+          "attendance": 2,
+          "skill": 6.4,
+          "contribution": 7,
+          "growth": 2,
+          "etc": 6.7
+        },
+        "subs": {
+          "attitude": 1,
+          "domestic": 1,
+          "overseas": 1,
+          "ts": 3,
+          "performance": 3,
+          "customer": 4,
+          "initiative": 4,
+          "cooperation": 3,
+          "selfdev": 1,
+          "cert": 1,
+          "meeting": 3,
+          "influence": 4
+        }
+      }
+    ]
+  },
+  "savedAt": "2026-08-26T07:32:33.917Z"
+}
