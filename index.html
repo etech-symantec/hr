@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>팀원 인사평가 관리</title>
+<style>
+  :root{
+    --navy:#122b3f;
+    --navy-2:#0d2130;
+    --paper:#f5f3ee;
+    --card:#ffffff;
+    --ink:#1c2530;
+    --ink-soft:#5b6672;
+    --line:#e1ddd2;
+    --gold:#c8912f;
+    --gold-soft:#f2e3c6;
+
+    --c-attendance:#1c5f8c;
+    --c-attendance-bg:#e7f0f7;
+    --c-skill:#7a1f3d;
+    --c-skill-bg:#f6e6ec;
+    --c-contribution:#5b3a8c;
+    --c-contribution-bg:#ede6f5;
+    --c-growth:#3d4650;
+    --c-growth-bg:#e8e9eb;
+    --c-etc:#b5651d;
+    --c-etc-bg:#faeada;
+    --c-accident:#1e4d3b;
+    --c-accident-bg:#e3ede8;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Top banner ---------- */
+  header.top{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);
+    color:#fff;
+    padding:28px 32px 22px;
+  }
+  header.top .eyebrow{
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    opacity:.85;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  header.top h1{
+    margin:0 0 4px;
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:-.01em;
+  }
+  header.top p{margin:0;font-size:13px;color:#c7d2db;}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    max-width:1400px;
+    margin:-18px auto 0;
+    padding:0 32px;
+    position:relative;
+    z-index:2;
+  }
+  .toolbar-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(18,43,63,.08);
+    padding:16px 20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .year-tabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .year-tab{
+    border:1px solid var(--line);
+    background:#fbfaf7;
+    color:var(--ink-soft);
+    padding:7px 16px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .year-tab:hover{border-color:var(--navy);color:var(--navy);}
+  .year-tab.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .year-add{
+    width:30px;height:30px;border-radius:50%;
+    border:1px dashed #b9b2a0;background:transparent;color:var(--ink-soft);
+    cursor:pointer;font-size:16px;line-height:1;
+  }
+  .year-add:hover{border-color:var(--navy);color:var(--navy);}
+
+  .btn-group{display:flex;gap:8px;flex-wrap:wrap;}
+  .btn{
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    padding:8px 14px;
+    border-radius:9px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    transition:.15s;
+  }
+  .btn:hover{border-color:var(--navy);color:var(--navy);background:#f7f9fb;}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .btn.primary:hover{background:var(--navy-2);color:#fff;}
+  .btn.danger{color:#a3283f;}
+  .btn.danger:hover{border-color:#a3283f;color:#a3283f;}
+  .btn.small{padding:5px 10px;font-size:12px;}
+  input[type=file]{display:none;}
+
+  /* ---------- Table wrapper ---------- */
+  .table-wrap{
+    max-width:1400px;
+    margin:22px auto 60px;
+    padding:0 32px;
+  }
+  .table-scroll{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:auto;
+    box-shadow:0 10px 30px rgba(18,43,63,.05);
+  }
+  table{border-collapse:collapse;width:100%;min-width:1500px;font-size:12.5px;}
+  thead th{position:sticky;top:0;z-index:3;}
+  th,td{border-right:1px solid #ffffff33;padding:0;}
+
+  .grp-row th{
+    color:#fff;
+    text-align:center;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.02em;
+    padding:8px 6px;
+    border-right:2px solid rgba(255,255,255,.35);
+  }
+  .grp-attendance{background:var(--c-attendance);}
+  .grp-skill{background:var(--c-skill);}
+  .grp-contribution{background:var(--c-contribution);}
+  .grp-growth{background:var(--c-growth);}
+  .grp-etc{background:var(--c-etc);}
+  .grp-accident{background:var(--c-accident);}
+  .grp-base{background:var(--navy-2);}
+
+  .sub-row th{
+    background:var(--navy-2);
+    color:#eef2f5;
+    font-size:11px;
+    font-weight:600;
+    padding:7px 6px;
+    text-align:center;
+    white-space:nowrap;
+    border-right:1px solid rgba(255,255,255,.12);
+  }
+  .sub-row th.weight{font-weight:400;color:#b9c6cf;font-size:10px;display:block;margin-top:2px;}
+
+  tbody td{
+    padding:8px 8px;
+    border-bottom:1px solid var(--line);
+    text-align:center;
+    white-space:nowrap;
+    background:#fff;
+  }
+  tbody tr:nth-child(even) td{background:#faf9f5;}
+  tbody tr:hover td{background:#f1f6fa;}
+
+  td.name{font-weight:800;color:var(--navy);text-align:left;padding-left:14px;cursor:default;}
+  td.position select{
+    border:1px solid var(--line);border-radius:6px;padding:3px 6px;font-size:12px;
+    font-weight:700;background:#fff;color:var(--ink);
+  }
+  td.total{font-weight:800;font-size:14px;color:var(--navy-2);}
+  td.rank{color:var(--ink-soft);font-weight:700;}
+
+  .score-input{
+    width:56px;border:1px solid transparent;background:transparent;
+    text-align:center;font-weight:800;font-size:13px;border-radius:6px;padding:3px 2px;
+  }
+  .score-input:hover{border-color:var(--line);background:#fff;}
+  .score-input:focus{border-color:var(--navy);background:#fff;outline:none;}
+  .score-attendance{color:var(--c-attendance);} 
+  .score-skill{color:var(--c-skill);}
+  .score-contribution{color:var(--c-contribution);}
+  .score-growth{color:var(--c-growth);}
+  .score-etc{color:var(--c-etc);}
+  .score-accident{color:var(--c-accident);}
+
+  .cell-attendance{background:var(--c-attendance-bg) !important;}
+  .cell-skill{background:var(--c-skill-bg) !important;}
+  .cell-contribution{background:var(--c-contribution-bg) !important;}
+  .cell-growth{background:var(--c-growth-bg) !important;}
+  .cell-etc{background:var(--c-etc-bg) !important;}
+  .cell-accident{background:var(--c-accident-bg) !important;}
+  tbody tr:hover td.cell-attendance{background:#dcebf5 !important;}
+  tbody tr:hover td.cell-skill{background:#f0d9e3 !important;}
+  tbody tr:hover td.cell-contribution{background:#e2d6f0 !important;}
+  tbody tr:hover td.cell-growth{background:#dbdde0 !important;}
+  tbody tr:hover td.cell-etc{background:#f5deb9 !important;}
+  tbody tr:hover td.cell-accident{background:#d3e3da !important;}
+
+  .stars{display:inline-flex;gap:1px;cursor:pointer;user-select:none;}
+  .stars span{font-size:14px;color:#dcd6c8;}
+  .stars span.on{color:var(--gold);}
+
+  .memo-input{
+    width:120px;border:1px solid transparent;background:transparent;
+    font-size:12px;padding:4px 6px;border-radius:6px;color:var(--ink-soft);
+  }
+  .memo-input:hover,.memo-input:focus{border-color:var(--line);background:#fff;outline:none;color:var(--ink);}
+
+  .row-actions button{
+    border:none;background:transparent;cursor:pointer;font-size:13px;color:#b6b0a0;
+    padding:2px 4px;
+  }
+  .row-actions button:hover{color:#a3283f;}
+
+  tfoot td{
+    padding:10px 8px;font-size:12px;color:var(--ink-soft);background:#f7f5ef;
+    border-top:2px solid var(--line);
+  }
+
+  .empty-state{
+    text-align:center;padding:60px 20px;color:var(--ink-soft);
+  }
+  .empty-state .big{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(18,29,38,.45);
+    display:none;align-items:center;justify-content:center;z-index:50;padding:20px;
+  }
+  .modal-backdrop.show{display:flex;}
+  .modal{
+    background:#fff;border-radius:14px;padding:24px 26px;max-width:420px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+  }
+  .modal h3{margin:0 0 14px;font-size:16px;color:var(--navy-2);}
+  .modal label{display:block;font-size:12px;color:var(--ink-soft);margin:12px 0 4px;font-weight:700;}
+  .modal input, .modal select{
+    width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;
+    font-family:inherit;
+  }
+  .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
+
+  .weight-grid{display:grid;grid-template-columns:1fr 70px;gap:6px 10px;align-items:center;margin-top:4px;}
+  .weight-grid .cat-label{font-size:12px;font-weight:800;margin-top:8px;grid-column:1 / -1;}
+  .weight-grid input{padding:6px 8px;font-size:12px;}
+
+  footer.note{
+    max-width:1400px;margin:0 auto 50px;padding:0 32px;color:var(--ink-soft);font-size:12px;line-height:1.7;
+  }
+  footer.note b{color:var(--ink);}
+
+  @media (max-width:720px){
+    header.top{padding:22px 16px 18px;}
+    .toolbar{padding:0 16px;}
+    .table-wrap{padding:0 16px;}
+    footer.note{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="eyebrow">Team Performance Review</div>
+  <h1 id="teamTitle">팀원 인사평가 관리</h1>
+  <p>연도별로 근태·기술력·기여도·자기계발·기타·사고 항목을 기록하고 총점을 관리합니다.</p>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-card">
+    <div class="year-tabs" id="yearTabs"></div>
+    <div class="btn-group">
+      <button class="btn" id="btnWeights">⚙ 배점 설정</button>
+      <button class="btn" id="btnExport">⬇ JSON 내보내기</button>
+      <button class="btn" id="btnImportTrigger">⬆ JSON 가져오기</button>
+      <input type="file" id="btnImport" accept="application/json">
+      <button class="btn primary" id="btnAddMember">+ 팀원 추가</button>
+    </div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="table-scroll">
+    <table id="mainTable">
+      <thead>
+        <tr class="grp-row" id="grpRow"></tr>
+        <tr class="sub-row" id="subRow"></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr><td id="footNote" colspan="99">팀원이 없습니다.</td></tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<footer class="note">
+  <b>사용 방법</b> · 점수 칸은 클릭해서 직접 수정할 수 있고, 별점을 바꾸면 해당 항목 점수가 배점 가중치에 따라 자동 계산되어 채워집니다(이후 직접 값을 덮어써도 됩니다).
+  모든 데이터는 이 페이지 안에서만 저장되므로, 작업을 마치면 <b>JSON 내보내기</b>로 파일을 내려받아 GitHub 저장소에 커밋해 두세요.
+  다음에 다시 열 때는 <b>JSON 가져오기</b>로 그 파일을 불러오면 이어서 관리할 수 있습니다. 연도 탭 옆의 + 버튼으로 새 연도를 추가하면 그 해 평가를 별도로 쌓을 수 있습니다.
+</footer>
+
+<!-- Member modal -->
+<div class="modal-backdrop" id="memberModalBackdrop">
+  <div class="modal">
+    <h3 id="memberModalTitle">팀원 추가</h3>
+    <label>이름</label>
+    <input id="mName" type="text" placeholder="예: 홍길동">
+    <label>직책</label>
+    <select id="mPosition">
+      <option>수석</option>
+      <option>책임</option>
+      <option>선임</option>
+      <option>주임</option>
+      <option>사원</option>
+    </select>
+    <div class="modal-footer">
+      <button class="btn" id="mCancel">취소</button>
+      <button class="btn primary" id="mSave">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Year modal -->
+<div class="modal-backdrop" id="yearModalBackdrop">
+  <div class="modal">
+    <h3>연도 추가</h3>
+    <label>새 연도</label>
+    <input id="yNew" type="number" placeholder="예: 2027">
+    <label>초기 데이터</label>
+    <select id="ySource">
+      <option value="empty">빈 목록으로 시작</option>
+      <option value="copy">현재 연도 팀원 명단 복사(점수는 초기화)</option>
+    </select>
+    <div class="modal-footer">
+      <button class="btn" id="yCancel">취소</button>
+      <button class="btn primary" id="ySave">추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- Weights modal -->
+<div class="modal-backdrop" id="weightModalBackdrop">
+  <div class="modal" style="max-width:480px;">
+    <h3>배점(가중치) 설정</h3>
+    <p style="font-size:12px;color:var(--ink-soft);margin:-6px 0 4px;">항목 점수 = (별점 가중평균 × 2), 가중치를 바꾸면 자동계산 방식이 바뀝니다.</p>
+    <div class="weight-grid" id="weightGrid"></div>
+    <div class="modal-footer">
+      <button class="btn" id="wCancel">취소</button>
+      <button class="btn primary" id="wSave">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==================== CONFIG ==================== */
+const CONFIG = {
+  categories: [
+    { key:'attendance',   label:'근태',        cls:'attendance',   subs:[
+        {key:'attitude', label:'근태', weight:4},
+        {key:'domestic', label:'국내출장', weight:0.5},
+        {key:'overseas', label:'해외출장', weight:0.5}
+    ]},
+    { key:'skill',        label:'기술력(개인)', cls:'skill',        subs:[
+        {key:'ts', label:'기술력/TS', weight:3},
+        {key:'performance', label:'실적/성과', weight:1},
+        {key:'customer', label:'고객관리', weight:1}
+    ]},
+    { key:'contribution', label:'기여도',      cls:'contribution', subs:[
+        {key:'initiative', label:'업무주도성/기여도', weight:2},
+        {key:'cooperation', label:'협력/지원', weight:2}
+    ]},
+    { key:'growth',       label:'자기계발',    cls:'growth',       subs:[
+        {key:'selfdev', label:'자기계발', weight:1},
+        {key:'cert', label:'자격증', weight:2}
+    ]},
+    { key:'etc',          label:'기타(팀)',    cls:'etc',          subs:[
+        {key:'meeting', label:'회의/정보공유', weight:2},
+        {key:'influence', label:'의사소통/영향력', weight:1}
+    ]}
+  ],
+  accident: { label:'사고', cls:'accident' }
+};
+
+/* ==================== SEED DATA (2026, from initial review sheet) ==================== */
+const SEED_2026 = [
+  mk('신호근','수석', {attendance:[5,5,5]}, {skill:[4,3,4]}, {contribution:[5,1]}, {growth:[1,5]}, {etc:[3,2]}, -2, 88.5),
+  mk('김상문','수석', {attendance:[5,4]}, {skill:[3,3,4]}, {contribution:[5,1]}, {growth:[1,3]}, {etc:[2,2]}, 0, 56.5),
+  mk('홍진영','책임', {attendance:[5,5]}, {skill:[4,3,4]}, {contribution:[3,3]}, {growth:[1,1]}, {etc:[2,4]}, 0, 63.5),
+  mk('강성준','선임', {attendance:[4,4,1]}, {skill:[2,3,4]}, {contribution:[5,4]}, {growth:[3,2]}, {etc:[2,5]}, 0, 60),
+  mk('윤태리','선임', {attendance:[5,3,1]}, {skill:[3,4,5]}, {contribution:[3,3]}, {growth:[1,1]}, {etc:[3,4]}, 0, 63.5),
+  mk('박동식','선임', {attendance:[1,1,1]}, {skill:[3,3,4]}, {contribution:[4,3]}, {growth:[1,1]}, {etc:[3,4]}, 0, 49),
+];
+
+function mk(name, position, attendance, skill, contribution, growth, etc, accident, totalOverride){
+  return {
+    id: crypto.randomUUID(),
+    name, position, memo:'',
+    accident: accident,
+    totalOverride: (typeof totalOverride === 'number') ? totalOverride : null,
+    scores: { attendance:null, skill:null, contribution:null, growth:null, etc:null },
+    subs: {
+      attitude: attendance.attendance[0], domestic: attendance.attendance[1], overseas: attendance.attendance[2],
+      ts: skill.skill[0], performance: skill.skill[1], customer: skill.skill[2],
+      initiative: contribution.contribution[0], cooperation: contribution.contribution[1],
+      selfdev: growth.growth[0], cert: growth.growth[1],
+      meeting: etc.etc[0], influence: etc.etc[1]
+    }
+  };
+}
+
+let STATE = {
+  weights: JSON.parse(JSON.stringify(CONFIG.categories)), // editable copy holding weights
+  years: { '2026': SEED_2026 },
+  currentYear: '2026'
+};
+
+/* ==================== HELPERS ==================== */
+function catWeights(catKey){
+  return STATE.weights.find(c=>c.key===catKey).subs;
+}
+function computeCategoryScore(member, catKey){
+  const subs = catWeights(catKey);
+  let sum=0, wsum=0;
+  subs.forEach(s=>{
+    const v = member.subs[s.key] ?? 0;
+    sum += v * s.weight;
+    wsum += s.weight;
+  });
+  if(wsum===0) return 0;
+  return Math.round(((sum/wsum) * 2) * 10) / 10; // scale 1-5 stars -> 0-10
+}
+function ensureScores(member){
+  CONFIG.categories.forEach(c=>{
+    if(member.scores[c.key] === null || member.scores[c.key] === undefined){
+      member.scores[c.key] = computeCategoryScore(member, c.key);
+    }
+  });
+}
+function totalOf(member){
+  if(typeof member.totalOverride === 'number') return member.totalOverride;
+  let t = 0;
+  CONFIG.categories.forEach(c=> t += (member.scores[c.key]||0));
+  t += (member.accident||0);
+  return Math.round(t*10)/10;
+}
+function currentMembers(){
+  return STATE.years[STATE.currentYear] || [];
+}
+function starsHtml(value, max=5){
+  let h = '';
+  for(let i=1;i<=max;i++){ h += `<span class="${i<=value?'on':''}" data-v="${i}">★</span>`; }
+  return h;
+}
+
+/* ==================== RENDER ==================== */
+function renderYearTabs(){
+  const wrap = document.getElementById('yearTabs');
+  const years = Object.keys(STATE.years).sort((a,b)=>b-a);
+  wrap.innerHTML = years.map(y=>
+    `<button class="year-tab ${y===STATE.currentYear?'active':''}" data-y="${y}">${y}년</button>`
+  ).join('') + `<button class="year-add" id="yearAddBtn" title="연도 추가">+</button>`;
+
+  wrap.querySelectorAll('.year-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ STATE.currentYear = btn.dataset.y; renderAll(); });
+  });
+  document.getElementById('yearAddBtn').addEventListener('click', openYearModal);
+}
+
+function renderHead(){
+  const grp = document.getElementById('grpRow');
+  const sub = document.getElementById('subRow');
+
+  let grpHtml = `<th class="grp-base" rowspan="2" style="min-width:170px;">이름 / 직책</th>`;
+  let subHtml = ``;
+
+  CONFIG.categories.forEach(c=>{
+    const subs = catWeights(c.key);
+    grpHtml += `<th class="grp-${c.cls}" colspan="${subs.length+1}">${c.label}</th>`;
+    subHtml += `<th class="sub-row-score">${c.label}점수</th>`;
+    subs.forEach(s=>{
+      subHtml += `<th>${s.label}<span class="weight">×${s.weight}</span></th>`;
+    });
+  });
+
+  grpHtml += `<th class="grp-accident" rowspan="2">사고</th>`;
+  grpHtml += `<th class="grp-base" rowspan="2">총점</th>`;
+  grpHtml += `<th class="grp-base" rowspan="2">메모</th>`;
+  grpHtml += `<th class="grp-base" rowspan="2"></th>`;
+
+  grp.innerHTML = grpHtml;
+  sub.innerHTML = subHtml;
+}
+
+function renderBody(){
+  const tbody = document.getElementById('tbody');
+  const members = currentMembers();
+  members.forEach(ensureScores);
+  // sort by total desc for ranking display but keep original order for editing simplicity
+  if(members.length===0){
+    tbody.innerHTML = `<tr><td colspan="99"><div class="empty-state"><div class="big">등록된 팀원이 없습니다</div>이 연도에 “+ 팀원 추가” 버튼으로 인원을 등록해 보세요.</div></td></tr>`;
+    document.getElementById('footNote').textContent = '팀원이 없습니다.';
+    return;
+  }
+
+  let rows = '';
+  members.forEach(m=>{
+    rows += `<tr data-id="${m.id}">`;
+    rows += `<td class="name">${escapeHtml(m.name)}<br>
+      <select class="posSelect" data-id="${m.id}">
+        ${['수석','책임','선임','주임','사원'].map(p=>`<option ${p===m.position?'selected':''}>${p}</option>`).join('')}
+      </select></td>`;
+
+    CONFIG.categories.forEach(c=>{
+      rows += `<td class="cell-${c.cls}"><input class="score-input score-${c.cls}" data-id="${m.id}" data-cat="${c.key}" type="number" step="0.1" value="${m.scores[c.key]}"></td>`;
+      const subs = catWeights(c.key);
+      subs.forEach(s=>{
+        rows += `<td class="cell-${c.cls}"><span class="stars" data-id="${m.id}" data-sub="${s.key}" data-cat="${c.key}">${starsHtml(m.subs[s.key]||0)}</span></td>`;
+      });
+    });
+
+    rows += `<td class="cell-accident"><input class="score-input score-accident" data-id="${m.id}" data-field="accident" type="number" step="0.5" value="${m.accident||0}"></td>`;
+    rows += `<td class="total">${totalOf(m)}</td>`;
+    rows += `<td><input class="memo-input" data-id="${m.id}" data-field="memo" value="${escapeHtml(m.memo||'')}" placeholder="메모"></td>`;
+    rows += `<td class="row-actions"><button data-id="${m.id}" class="delBtn" title="삭제">✕</button></td>`;
+    rows += `</tr>`;
+  });
+  tbody.innerHTML = rows;
+
+  const avg = Math.round((members.reduce((a,m)=>a+totalOf(m),0)/members.length)*10)/10;
+  document.getElementById('footNote').textContent = `총 ${members.length}명 · 평균 총점 ${avg}점 (${STATE.currentYear}년)`;
+
+  attachRowEvents();
+}
+
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function attachRowEvents(){
+  document.querySelectorAll('.score-input[data-cat]').forEach(inp=>{
+    inp.addEventListener('change', e=>{
+      const id = inp.dataset.id, cat = inp.dataset.cat;
+      const m = findMember(id);
+      m.scores[cat] = parseFloat(inp.value) || 0;
+      updateTotalCell(id);
+    });
+  });
+  document.querySelectorAll('.score-accident').forEach(inp=>{
+    inp.addEventListener('change', e=>{
+      const id = inp.dataset.id;
+      const m = findMember(id);
+      m.accident = parseFloat(inp.value) || 0;
+      updateTotalCell(id);
+    });
+  });
+  document.querySelectorAll('.stars').forEach(starEl=>{
+    starEl.addEventListener('click', e=>{
+      const t = e.target.closest('span[data-v]');
+      if(!t) return;
+      const v = parseInt(t.dataset.v);
+      const id = starEl.dataset.id, sub = starEl.dataset.sub, cat = starEl.dataset.cat;
+      const m = findMember(id);
+      m.subs[sub] = (m.subs[sub] === v) ? v-1 : v; // click same top star to reduce by one, else set
+      starEl.innerHTML = starsHtml(m.subs[sub]||0);
+      m.scores[cat] = computeCategoryScore(m, cat);
+      const scoreInput = document.querySelector(`.score-input[data-id="${id}"][data-cat="${cat}"]`);
+      if(scoreInput) scoreInput.value = m.scores[cat];
+      updateTotalCell(id);
+    });
+  });
+  document.querySelectorAll('.memo-input').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      findMember(inp.dataset.id).memo = inp.value;
+    });
+  });
+  document.querySelectorAll('.posSelect').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      findMember(sel.dataset.id).position = sel.value;
+    });
+  });
+  document.querySelectorAll('.delBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const m = findMember(btn.dataset.id);
+      if(confirm(`${m.name}님을 ${STATE.currentYear}년 명단에서 삭제할까요?`)){
+        STATE.years[STATE.currentYear] = currentMembers().filter(x=>x.id!==btn.dataset.id);
+        renderAll();
+      }
+    });
+  });
+}
+
+function updateTotalCell(id){
+  const m = findMember(id);
+  m.totalOverride = null; // manual edits recompute total from parts going forward
+  const row = document.querySelector(`tr[data-id="${id}"] td.total`);
+  if(row) row.textContent = totalOf(m);
+  const members = currentMembers();
+  const avg = Math.round((members.reduce((a,mm)=>a+totalOf(mm),0)/members.length)*10)/10;
+  document.getElementById('footNote').textContent = `총 ${members.length}명 · 평균 총점 ${avg}점 (${STATE.currentYear}년)`;
+}
+
+function findMember(id){
+  return currentMembers().find(m=>m.id===id);
+}
+
+function renderAll(){
+  renderYearTabs();
+  renderHead();
+  renderBody();
+}
+
+/* ==================== MEMBER MODAL ==================== */
+const memberModal = document.getElementById('memberModalBackdrop');
+document.getElementById('btnAddMember').addEventListener('click', ()=>{
+  document.getElementById('memberModalTitle').textContent = '팀원 추가';
+  document.getElementById('mName').value = '';
+  document.getElementById('mPosition').value = '선임';
+  memberModal.classList.add('show');
+});
+document.getElementById('mCancel').addEventListener('click', ()=> memberModal.classList.remove('show'));
+document.getElementById('mSave').addEventListener('click', ()=>{
+  const name = document.getElementById('mName').value.trim();
+  if(!name){ alert('이름을 입력해 주세요.'); return; }
+  const position = document.getElementById('mPosition').value;
+  const newMember = {
+    id: crypto.randomUUID(), name, position, memo:'', accident:0, totalOverride:null,
+    scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
+    subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
+  };
+  if(!STATE.years[STATE.currentYear]) STATE.years[STATE.currentYear] = [];
+  STATE.years[STATE.currentYear].push(newMember);
+  memberModal.classList.remove('show');
+  renderAll();
+});
+
+/* ==================== YEAR MODAL ==================== */
+const yearModal = document.getElementById('yearModalBackdrop');
+function openYearModal(){
+  document.getElementById('yNew').value = (parseInt(STATE.currentYear)+1);
+  yearModal.classList.add('show');
+}
+document.getElementById('yCancel').addEventListener('click', ()=> yearModal.classList.remove('show'));
+document.getElementById('ySave').addEventListener('click', ()=>{
+  const y = document.getElementById('yNew').value.trim();
+  if(!y){ alert('연도를 입력해 주세요.'); return; }
+  if(STATE.years[y]){ alert('이미 존재하는 연도입니다.'); return; }
+  const source = document.getElementById('ySource').value;
+  if(source === 'copy'){
+    STATE.years[y] = currentMembers().map(m=>({
+      id: crypto.randomUUID(), name:m.name, position:m.position, memo:'', accident:0, totalOverride:null,
+      scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
+      subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
+    }));
+  } else {
+    STATE.years[y] = [];
+  }
+  STATE.currentYear = y;
+  yearModal.classList.remove('show');
+  renderAll();
+});
+
+/* ==================== WEIGHTS MODAL ==================== */
+const weightModal = document.getElementById('weightModalBackdrop');
+document.getElementById('btnWeights').addEventListener('click', ()=>{
+  const grid = document.getElementById('weightGrid');
+  let html = '';
+  STATE.weights.forEach(c=>{
+    html += `<div class="cat-label">${c.label}</div>`;
+    c.subs.forEach(s=>{
+      html += `<div>${s.label}</div><input type="number" step="0.5" data-cat="${c.key}" data-sub="${s.key}" value="${s.weight}">`;
+    });
+  });
+  grid.innerHTML = html;
+  weightModal.classList.add('show');
+});
+document.getElementById('wCancel').addEventListener('click', ()=> weightModal.classList.remove('show'));
+document.getElementById('wSave').addEventListener('click', ()=>{
+  document.querySelectorAll('#weightGrid input').forEach(inp=>{
+    const cat = STATE.weights.find(c=>c.key===inp.dataset.cat);
+    const sub = cat.subs.find(s=>s.key===inp.dataset.sub);
+    sub.weight = parseFloat(inp.value) || 0;
+  });
+  // recompute all scores across all years since weights changed
+  Object.values(STATE.years).flat().forEach(m=>{
+    CONFIG.categories.forEach(c=> m.scores[c.key] = computeCategoryScore(m, c.key));
+  });
+  weightModal.classList.remove('show');
+  renderAll();
+});
+
+/* ==================== IMPORT / EXPORT ==================== */
+document.getElementById('btnExport').addEventListener('click', ()=>{
+  const payload = { weights: STATE.weights, years: STATE.years, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `team-eval-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('btnImportTrigger').addEventListener('click', ()=> document.getElementById('btnImport').click());
+document.getElementById('btnImport').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(!data.years) throw new Error('형식이 올바르지 않습니다.');
+      if(data.weights) STATE.weights = data.weights;
+      STATE.years = data.years;
+      STATE.currentYear = Object.keys(STATE.years).sort((a,b)=>b-a)[0];
+      renderAll();
+      alert('데이터를 불러왔습니다.');
+    }catch(err){
+      alert('JSON 파일을 읽는 중 오류가 발생했습니다: ' + err.message);
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+/* ==================== INIT ==================== */
+renderAll();
+</script>
+</body>
+</html>
