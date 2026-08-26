@@ -642,9 +642,15 @@ async function githubGetFile(){
   if(res.status === 401) throw new Error('토큰이 올바르지 않거나 만료되었습니다.');
   const json = await safeJson(res);
   if(!res.ok) throw new Error((json && json.message) || `불러오기 실패 (${res.status})`);
-  if(!json || !json.content) throw new Error('GitHub 응답이 비어 있습니다. GITHUB_CONFIG의 owner/repo/path가 올바른지 확인해 주세요.');
-  const content = b64DecodeUtf8(json.content);
-  return { data: JSON.parse(content), sha: json.sha };
+  if(!json) throw new Error('GitHub 응답이 비어 있습니다. GITHUB_CONFIG의 owner/repo/path가 올바른지 확인해 주세요.');
+
+  const raw = (typeof json.content === 'string') ? b64DecodeUtf8(json.content) : '';
+  const trimmed = raw.trim();
+  if(!trimmed) return { data:null, sha: json.sha };
+  let data;
+  try{ data = JSON.parse(trimmed); }
+  catch(e){ throw new Error('저장소의 데이터 파일 내용이 올바른 JSON 형식이 아닙니다. GitHub에서 해당 파일을 열어 내용을 비우거나 삭제한 뒤 다시 시도해 주세요.'); }
+  return { data, sha: json.sha };
 }
 
 async function githubSaveFile(payload, sha){
