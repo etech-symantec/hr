@@ -285,25 +285,25 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 0,
-          "skill": 0,
-          "contribution": 0,
+          "attendance": 8,
+          "skill": 10,
+          "contribution": 10,
           "growth": 0,
-          "etc": 0
+          "etc": 4
         },
         "subs": {
-          "attitude": 0,
+          "attitude": 5,
           "domestic": 0,
           "overseas": 0,
-          "ts": 0,
-          "performance": 0,
-          "customer": 0,
-          "initiative": 0,
-          "cooperation": 0,
+          "ts": 5,
+          "performance": 5,
+          "customer": 5,
+          "initiative": 5,
+          "cooperation": 5,
           "selfdev": 0,
           "cert": 0,
-          "meeting": 0,
-          "influence": 0
+          "meeting": 2,
+          "influence": 2
         }
       },
       {
@@ -315,19 +315,19 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 0,
-          "skill": 0,
+          "attendance": 8,
+          "skill": 8.8,
           "contribution": 0,
           "growth": 0,
           "etc": 0
         },
         "subs": {
-          "attitude": 0,
+          "attitude": 5,
           "domestic": 0,
           "overseas": 0,
-          "ts": 0,
-          "performance": 0,
-          "customer": 0,
+          "ts": 4,
+          "performance": 5,
+          "customer": 5,
           "initiative": 0,
           "cooperation": 0,
           "selfdev": 0,
@@ -345,19 +345,19 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 0,
-          "skill": 0,
+          "attendance": 8,
+          "skill": 6.4,
           "contribution": 0,
           "growth": 0,
           "etc": 0
         },
         "subs": {
-          "attitude": 0,
+          "attitude": 5,
           "domestic": 0,
           "overseas": 0,
-          "ts": 0,
-          "performance": 0,
-          "customer": 0,
+          "ts": 3,
+          "performance": 2,
+          "customer": 5,
           "initiative": 0,
           "cooperation": 0,
           "selfdev": 0,
@@ -375,19 +375,19 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 0,
-          "skill": 0,
+          "attendance": 8,
+          "skill": 7.2,
           "contribution": 0,
           "growth": 0,
           "etc": 0
         },
         "subs": {
-          "attitude": 0,
+          "attitude": 5,
           "domestic": 0,
           "overseas": 0,
-          "ts": 0,
-          "performance": 0,
-          "customer": 0,
+          "ts": 3,
+          "performance": 4,
+          "customer": 5,
           "initiative": 0,
           "cooperation": 0,
           "selfdev": 0,
@@ -405,19 +405,19 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 0,
-          "skill": 0,
+          "attendance": 8,
+          "skill": 4.4,
           "contribution": 0,
           "growth": 0,
           "etc": 0
         },
         "subs": {
-          "attitude": 0,
+          "attitude": 5,
           "domestic": 0,
           "overseas": 0,
-          "ts": 0,
-          "performance": 0,
-          "customer": 0,
+          "ts": 2,
+          "performance": 2,
+          "customer": 3,
           "initiative": 0,
           "cooperation": 0,
           "selfdev": 0,
@@ -435,19 +435,19 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 0,
-          "skill": 0,
+          "attendance": 8,
+          "skill": 4.4,
           "contribution": 0,
           "growth": 0,
           "etc": 0
         },
         "subs": {
-          "attitude": 0,
+          "attitude": 5,
           "domestic": 0,
           "overseas": 0,
-          "ts": 0,
-          "performance": 0,
-          "customer": 0,
+          "ts": 2,
+          "performance": 2,
+          "customer": 3,
           "initiative": 0,
           "cooperation": 0,
           "selfdev": 0,
@@ -458,5 +458,5 @@
       }
     ]
   },
-  "savedAt": "2026-08-28T00:55:39.162Z"
+  "savedAt": "2026-08-28T00:59:21.682Z"
 }
