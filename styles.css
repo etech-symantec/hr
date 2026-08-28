@@ -143,6 +143,8 @@
     font-weight:800;
     letter-spacing:.02em;
     padding:8px 6px;
+    height:34px;
+    box-sizing:border-box;
     border-right:2px solid rgba(255,255,255,.35);
   }
   .grp-attendance{background:var(--c-attendance);}
@@ -161,6 +163,8 @@
     padding:7px 6px;
     text-align:center;
     white-space:nowrap;
+    position:sticky;
+    top:34px;
     border-right:1px solid rgba(255,255,255,.12);
   }
   .weight-badge{
