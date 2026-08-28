@@ -305,8 +305,158 @@
           "meeting": 0,
           "influence": 0
         }
+      },
+      {
+        "id": "237c73ba-dbb0-4b0f-a84a-becc0233681a",
+        "name": "김현경",
+        "position": "선임",
+        "dept": "팔로알토",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": null,
+        "scores": {
+          "attendance": 0,
+          "skill": 0,
+          "contribution": 0,
+          "growth": 0,
+          "etc": 0
+        },
+        "subs": {
+          "attitude": 0,
+          "domestic": 0,
+          "overseas": 0,
+          "ts": 0,
+          "performance": 0,
+          "customer": 0,
+          "initiative": 0,
+          "cooperation": 0,
+          "selfdev": 0,
+          "cert": 0,
+          "meeting": 0,
+          "influence": 0
+        }
+      },
+      {
+        "id": "ee7d21df-dfd1-4058-97dd-e81114a60292",
+        "name": "양수진",
+        "position": "선임",
+        "dept": "팔로알토",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": null,
+        "scores": {
+          "attendance": 0,
+          "skill": 0,
+          "contribution": 0,
+          "growth": 0,
+          "etc": 0
+        },
+        "subs": {
+          "attitude": 0,
+          "domestic": 0,
+          "overseas": 0,
+          "ts": 0,
+          "performance": 0,
+          "customer": 0,
+          "initiative": 0,
+          "cooperation": 0,
+          "selfdev": 0,
+          "cert": 0,
+          "meeting": 0,
+          "influence": 0
+        }
+      },
+      {
+        "id": "b5c54f91-0a5b-43e8-b0e0-d08a7b4b2faf",
+        "name": "박정민",
+        "position": "연구원",
+        "dept": "팔로알토",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": null,
+        "scores": {
+          "attendance": 0,
+          "skill": 0,
+          "contribution": 0,
+          "growth": 0,
+          "etc": 0
+        },
+        "subs": {
+          "attitude": 0,
+          "domestic": 0,
+          "overseas": 0,
+          "ts": 0,
+          "performance": 0,
+          "customer": 0,
+          "initiative": 0,
+          "cooperation": 0,
+          "selfdev": 0,
+          "cert": 0,
+          "meeting": 0,
+          "influence": 0
+        }
+      },
+      {
+        "id": "07d3e635-50b9-4d22-b32b-952d16e93d99",
+        "name": "김준기",
+        "position": "연구원",
+        "dept": "팔로알토",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": null,
+        "scores": {
+          "attendance": 0,
+          "skill": 0,
+          "contribution": 0,
+          "growth": 0,
+          "etc": 0
+        },
+        "subs": {
+          "attitude": 0,
+          "domestic": 0,
+          "overseas": 0,
+          "ts": 0,
+          "performance": 0,
+          "customer": 0,
+          "initiative": 0,
+          "cooperation": 0,
+          "selfdev": 0,
+          "cert": 0,
+          "meeting": 0,
+          "influence": 0
+        }
+      },
+      {
+        "id": "3de1c80b-ce48-40b7-b758-dd4f127c153c",
+        "name": "우주혁",
+        "position": "연구원",
+        "dept": "팔로알토",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": null,
+        "scores": {
+          "attendance": 0,
+          "skill": 0,
+          "contribution": 0,
+          "growth": 0,
+          "etc": 0
+        },
+        "subs": {
+          "attitude": 0,
+          "domestic": 0,
+          "overseas": 0,
+          "ts": 0,
+          "performance": 0,
+          "customer": 0,
+          "initiative": 0,
+          "cooperation": 0,
+          "selfdev": 0,
+          "cert": 0,
+          "meeting": 0,
+          "influence": 0
+        }
       }
     ]
   },
-  "savedAt": "2026-08-28T00:54:27.400Z"
+  "savedAt": "2026-08-28T00:55:39.162Z"
 }
