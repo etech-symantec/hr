@@ -85,6 +85,13 @@
       <option>선임</option>
       <option>연구원</option>
     </select>
+    <label>담당</label>
+    <select id="mDept">
+      <option value="">담당 미지정</option>
+      <option value="시만텍">시만텍</option>
+      <option value="팔로알토">팔로알토</option>
+      <option value="클라우드플레어">클라우드플레어</option>
+    </select>
     <div class="modal-footer">
       <button class="btn" id="mCancel">취소</button>
       <button class="btn primary" id="mSave">저장</button>
@@ -218,7 +225,7 @@ const SEED_2026 = [
 function mk(name, position, attendance, skill, contribution, growth, etc, accident, totalOverride){
   return {
     id: crypto.randomUUID(),
-    name, position, memo:'',
+    name, position, dept:'', memo:'',
     accident: accident,
     totalOverride: (typeof totalOverride === 'number') ? totalOverride : null,
     scores: { attendance:null, skill:null, contribution:null, growth:null, etc:null },
@@ -294,7 +301,7 @@ function renderHead(){
   const grp = document.getElementById('grpRow');
   const sub = document.getElementById('subRow');
 
-  let grpHtml = `<th class="grp-base" rowspan="2" style="min-width:170px;">이름 / 직책</th>`;
+  let grpHtml = `<th class="grp-base" rowspan="2" style="min-width:190px;">이름 / 직책 / 담당</th>`;
   let subHtml = ``;
 
   CONFIG.categories.forEach(c=>{
@@ -302,7 +309,7 @@ function renderHead(){
     grpHtml += `<th class="grp-${c.cls}" colspan="${subs.length+1}">${c.label}</th>`;
     subHtml += `<th class="sub-row-score">${c.label}점수</th>`;
     subs.forEach(s=>{
-      subHtml += `<th>${s.label}<span class="weight">×${s.weight}</span></th>`;
+      subHtml += `<th>${s.label}<br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
     });
   });
 
@@ -313,6 +320,44 @@ function renderHead(){
 
   grp.innerHTML = grpHtml;
   sub.innerHTML = subHtml;
+  attachWeightEditing();
+}
+
+function attachWeightEditing(){
+  document.querySelectorAll('.weight-badge').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const cat = el.dataset.cat, sub = el.dataset.sub;
+      const subObj = catWeights(cat).find(s=>s.key===sub);
+      const current = subObj.weight;
+
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.step = '0.5';
+      input.value = current;
+      input.className = 'weight-input';
+      el.replaceWith(input);
+      input.focus();
+      input.select();
+
+      let done = false;
+      const commit = ()=>{
+        if(done) return;
+        done = true;
+        const val = parseFloat(input.value);
+        subObj.weight = isNaN(val) ? current : val;
+        // weights are global, so recompute this category's score for every member, every year
+        Object.values(STATE.years).flat().forEach(m=>{
+          m.scores[cat] = computeCategoryScore(m, cat);
+        });
+        renderAll();
+      };
+      input.addEventListener('blur', commit);
+      input.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){ input.blur(); }
+        if(e.key === 'Escape'){ done = true; renderAll(); }
+      });
+    });
+  });
 }
 
 function renderBody(){
@@ -327,6 +372,7 @@ function renderBody(){
   }
 
   let rows = '';
+  const DEPT_OPTIONS = ['', '시만텍', '팔로알토', '클라우드플레어'];
   members.forEach(m=>{
     rows += `<tr data-id="${m.id}">`;
     rows += `<td class="name">
@@ -334,6 +380,11 @@ function renderBody(){
       <div class="position-badge" data-pos="${m.position}">
         <select class="posSelect" data-id="${m.id}">
           ${['수석','책임','선임','연구원'].map(p=>`<option ${p===m.position?'selected':''}>${p}</option>`).join('')}
+        </select>
+      </div>
+      <div class="dept-badge" data-dept="${m.dept||''}">
+        <select class="deptSelect" data-id="${m.id}">
+          ${DEPT_OPTIONS.map(d=>`<option value="${d}" ${(m.dept||'')===d?'selected':''}>${d===''?'담당 미지정':d}</option>`).join('')}
         </select>
       </div></td>`;
 
@@ -404,6 +455,12 @@ function attachRowEvents(){
       sel.closest('.position-badge').dataset.pos = sel.value;
     });
   });
+  document.querySelectorAll('.deptSelect').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      findMember(sel.dataset.id).dept = sel.value;
+      sel.closest('.dept-badge').dataset.dept = sel.value;
+    });
+  });
   document.querySelectorAll('.delBtn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const m = findMember(btn.dataset.id);
@@ -441,6 +498,7 @@ document.getElementById('btnAddMember').addEventListener('click', ()=>{
   document.getElementById('memberModalTitle').textContent = '팀원 추가';
   document.getElementById('mName').value = '';
   document.getElementById('mPosition').value = '선임';
+  document.getElementById('mDept').value = '';
   memberModal.classList.add('show');
 });
 document.getElementById('mCancel').addEventListener('click', ()=> memberModal.classList.remove('show'));
@@ -448,8 +506,9 @@ document.getElementById('mSave').addEventListener('click', ()=>{
   const name = document.getElementById('mName').value.trim();
   if(!name){ alert('이름을 입력해 주세요.'); return; }
   const position = document.getElementById('mPosition').value;
+  const dept = document.getElementById('mDept').value;
   const newMember = {
-    id: crypto.randomUUID(), name, position, memo:'', accident:0, totalOverride:null,
+    id: crypto.randomUUID(), name, position, dept, memo:'', accident:0, totalOverride:null,
     scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
     subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
   };
@@ -473,7 +532,7 @@ document.getElementById('ySave').addEventListener('click', ()=>{
   const source = document.getElementById('ySource').value;
   if(source === 'copy'){
     STATE.years[y] = currentMembers().map(m=>({
-      id: crypto.randomUUID(), name:m.name, position:m.position, memo:'', accident:0, totalOverride:null,
+      id: crypto.randomUUID(), name:m.name, position:m.position, dept:m.dept||'', memo:'', accident:0, totalOverride:null,
       scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
       subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
     }));
