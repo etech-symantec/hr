@@ -130,6 +130,7 @@
     border:1px solid var(--line);
     border-radius:14px;
     overflow:auto;
+    max-height:calc(100vh - 220px);
     box-shadow:0 10px 30px rgba(18,43,63,.05);
   }
   table{border-collapse:collapse;width:100%;min-width:1500px;font-size:12.5px;}
