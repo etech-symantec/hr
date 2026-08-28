@@ -99,9 +99,10 @@
   "years": {
     "2026": [
       {
-        "id": "878a7b9d-b122-4b27-b032-7d62d3a72eb3",
+        "id": "6069d73b-2055-486d-aeab-e55725aea608",
         "name": "신호근",
         "position": "수석",
+        "dept": "",
         "memo": "",
         "accident": -2,
         "totalOverride": 88.5,
@@ -128,9 +129,10 @@
         }
       },
       {
-        "id": "6d6c7e1b-28c8-411a-896c-c4bd7907e50b",
+        "id": "745afa20-9823-4460-86e1-93f2c3b665f0",
         "name": "김상문",
         "position": "수석",
+        "dept": "시만텍",
         "memo": "",
         "accident": 0,
         "totalOverride": 56.5,
@@ -156,9 +158,10 @@
         }
       },
       {
-        "id": "3ff41b91-dbcd-4bc4-aad7-0174d7555747",
+        "id": "a711d9ad-45bc-45cf-9d6a-408de186d86c",
         "name": "홍진영",
         "position": "책임",
+        "dept": "시만텍",
         "memo": "",
         "accident": 0,
         "totalOverride": 63.5,
@@ -184,9 +187,10 @@
         }
       },
       {
-        "id": "b74e0b6e-bcd7-47b1-a7e3-4d500a86c003",
+        "id": "cc1ff665-c46b-49a0-8b0f-be385993e10f",
         "name": "강성준",
         "position": "선임",
+        "dept": "팔로알토",
         "memo": "",
         "accident": 0,
         "totalOverride": 60,
@@ -213,9 +217,10 @@
         }
       },
       {
-        "id": "510aef31-ce94-4773-836a-3a50eefd5d6b",
+        "id": "d9236c21-af36-4354-8bd0-b1467b0dedb3",
         "name": "윤태리",
         "position": "선임",
+        "dept": "시만텍",
         "memo": "",
         "accident": 0,
         "totalOverride": 63.5,
@@ -242,9 +247,10 @@
         }
       },
       {
-        "id": "f052ca20-16ff-4949-91e5-8f9900d42fd3",
+        "id": "58df60a9-f147-4719-b0fd-239b1d583b12",
         "name": "박동식",
         "position": "선임",
+        "dept": "시만텍",
         "memo": "",
         "accident": 0,
         "totalOverride": 49,
@@ -269,8 +275,38 @@
           "meeting": 3,
           "influence": 4
         }
+      },
+      {
+        "id": "2d71e50a-b8c0-4f64-82de-579b55c3584f",
+        "name": "이호진",
+        "position": "선임",
+        "dept": "팔로알토",
+        "memo": "",
+        "accident": 0,
+        "totalOverride": null,
+        "scores": {
+          "attendance": 0,
+          "skill": 0,
+          "contribution": 0,
+          "growth": 0,
+          "etc": 0
+        },
+        "subs": {
+          "attitude": 0,
+          "domestic": 0,
+          "overseas": 0,
+          "ts": 0,
+          "performance": 0,
+          "customer": 0,
+          "initiative": 0,
+          "cooperation": 0,
+          "selfdev": 0,
+          "cert": 0,
+          "meeting": 0,
+          "influence": 0
+        }
       }
     ]
   },
-  "savedAt": "2026-08-26T07:32:33.917Z"
+  "savedAt": "2026-08-28T00:54:27.400Z"
 }
