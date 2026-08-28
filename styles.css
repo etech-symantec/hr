@@ -184,11 +184,24 @@
   tbody tr:nth-child(even) td{background:#faf9f5;}
   tbody tr:hover td{background:#f1f6fa;}
 
-  td.name{text-align:left;padding-left:14px;cursor:default;}
-  .name-text{font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:6px;letter-spacing:-.01em;}
+  /* Frozen name column: stays visible while scrolling horizontally */
+  .sticky-col{
+    position:sticky;
+    left:0;
+    width:230px;
+    min-width:230px;
+    max-width:230px;
+    box-shadow:2px 0 6px rgba(18,43,63,.08);
+  }
+  thead .sticky-col{ z-index:5; } /* above other sticky headers */
+  tbody .sticky-col{ z-index:2; } /* above regular body cells, below header */
+
+  td.name{text-align:left;padding-left:14px;padding-right:10px;cursor:default;white-space:normal;}
+  .name-row{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;}
+  .name-text{font-weight:800;color:var(--navy);font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   .position-badge{
-    display:inline-block;border-radius:999px;transition:.15s;
+    display:inline-block;border-radius:999px;transition:.15s;flex:0 0 auto;
   }
   .position-badge select{
     appearance:none;-webkit-appearance:none;-moz-appearance:none;
@@ -196,8 +209,8 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6' viewBox='0 0 9 6'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='%23000' stroke-opacity='0.45' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat:no-repeat;
     background-position:right 9px center;
-    font-size:11.5px;font-weight:800;letter-spacing:.01em;
-    padding:5px 24px 5px 12px;border-radius:999px;cursor:pointer;
+    font-size:11px;font-weight:800;letter-spacing:.01em;
+    padding:4px 22px 4px 10px;border-radius:999px;cursor:pointer;
     color:inherit;
   }
   .position-badge select:focus{outline:2px solid rgba(18,43,63,.25);outline-offset:1px;}
@@ -208,10 +221,11 @@
   .position-badge[data-pos="주임"]{background:#dcf2ea;color:#1c7a5e;}
   .position-badge[data-pos="사원"]{background:#e8e8ec;color:#565c67;}
 
-  .dept-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+  .dept-chips{display:flex;flex-wrap:nowrap;gap:4px;margin-top:6px;overflow-x:auto;scrollbar-width:none;}
+  .dept-chips::-webkit-scrollbar{display:none;}
   .dept-chip{
     font-size:10px;font-weight:700;letter-spacing:.01em;
-    padding:3px 9px;border-radius:999px;cursor:pointer;
+    padding:3px 8px;border-radius:999px;cursor:pointer;flex:0 0 auto;
     border:1px solid var(--line);background:#fbfaf7;color:#a39d8c;
     transition:.15s;white-space:nowrap;
   }
