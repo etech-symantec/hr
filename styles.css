@@ -208,25 +208,18 @@
   .position-badge[data-pos="주임"]{background:#dcf2ea;color:#1c7a5e;}
   .position-badge[data-pos="사원"]{background:#e8e8ec;color:#565c67;}
 
-  .dept-badge{
-    display:inline-block;border-radius:999px;transition:.15s;margin-top:5px;
+  .dept-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+  .dept-chip{
+    font-size:10px;font-weight:700;letter-spacing:.01em;
+    padding:3px 9px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--line);background:#fbfaf7;color:#a39d8c;
+    transition:.15s;white-space:nowrap;
   }
-  .dept-badge select{
-    appearance:none;-webkit-appearance:none;-moz-appearance:none;
-    border:none;background-color:transparent;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6' viewBox='0 0 9 6'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='%23000' stroke-opacity='0.4' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;
-    background-position:right 8px center;
-    font-size:10.5px;font-weight:700;letter-spacing:.01em;
-    padding:4px 22px 4px 10px;border-radius:999px;cursor:pointer;
-    color:inherit;
-  }
-  .dept-badge select:focus{outline:2px solid rgba(18,43,63,.25);outline-offset:1px;}
+  .dept-chip:hover{border-color:#c9c2ae;color:#6b6656;}
+  .dept-chip.active[data-dept="시만텍"]{background:#fbeec2;color:#8a6100;border-color:#e6cf8a;}
+  .dept-chip.active[data-dept="팔로알토"]{background:#fbe0d5;color:#b83f12;border-color:#f0b494;}
+  .dept-chip.active[data-dept="클라우드플레어"]{background:#dcecfc;color:#1a5fb4;border-color:#a9cdf0;}
 
-  .dept-badge[data-dept=""]{background:#f0efe9;color:#8b8578;}
-  .dept-badge[data-dept="시만텍"]{background:#fbeec2;color:#8a6100;}
-  .dept-badge[data-dept="팔로알토"]{background:#fbe0d5;color:#b83f12;}
-  .dept-badge[data-dept="클라우드플레어"]{background:#dcecfc;color:#1a5fb4;}
 
   td.total{font-weight:800;font-size:14px;color:var(--navy-2);}
   td.rank{color:var(--ink-soft);font-weight:700;}
@@ -301,9 +294,13 @@
   }
   .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
 
-  .weight-grid{display:grid;grid-template-columns:1fr 70px;gap:6px 10px;align-items:center;margin-top:4px;}
-  .weight-grid .cat-label{font-size:12px;font-weight:800;margin-top:8px;grid-column:1 / -1;}
-  .weight-grid input{padding:6px 8px;font-size:12px;}
+  .modal-checkbox-group{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+  .modal-checkbox-group label{
+    display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);
+    margin:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;
+  }
+  .modal-checkbox-group label:hover{border-color:var(--navy);background:#f7f9fb;}
+  .modal-checkbox-group input[type="checkbox"]{width:auto;margin:0;}
 
   footer.note{
     max-width:1400px;margin:0 auto 50px;padding:0 32px;color:var(--ink-soft);font-size:12px;line-height:1.7;
