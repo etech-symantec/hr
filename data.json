@@ -126,7 +126,12 @@
           "cert": 5,
           "meeting": 3,
           "influence": 2
-        }
+        },
+        "depts": [
+          "시만텍",
+          "팔로알토",
+          "클라우드플레어"
+        ]
       },
       {
         "id": "745afa20-9823-4460-86e1-93f2c3b665f0",
@@ -155,7 +160,10 @@
           "cert": 3,
           "meeting": 2,
           "influence": 2
-        }
+        },
+        "depts": [
+          "시만텍"
+        ]
       },
       {
         "id": "a711d9ad-45bc-45cf-9d6a-408de186d86c",
@@ -184,7 +192,10 @@
           "cert": 1,
           "meeting": 2,
           "influence": 4
-        }
+        },
+        "depts": [
+          "시만텍"
+        ]
       },
       {
         "id": "cc1ff665-c46b-49a0-8b0f-be385993e10f",
@@ -214,7 +225,11 @@
           "cert": 2,
           "meeting": 2,
           "influence": 5
-        }
+        },
+        "depts": [
+          "시만텍",
+          "팔로알토"
+        ]
       },
       {
         "id": "d9236c21-af36-4354-8bd0-b1467b0dedb3",
@@ -244,7 +259,10 @@
           "cert": 1,
           "meeting": 3,
           "influence": 4
-        }
+        },
+        "depts": [
+          "시만텍"
+        ]
       },
       {
         "id": "58df60a9-f147-4719-b0fd-239b1d583b12",
@@ -274,7 +292,11 @@
           "cert": 1,
           "meeting": 3,
           "influence": 4
-        }
+        },
+        "depts": [
+          "시만텍",
+          "클라우드플레어"
+        ]
       },
       {
         "id": "2d71e50a-b8c0-4f64-82de-579b55c3584f",
@@ -304,7 +326,10 @@
           "cert": 0,
           "meeting": 2,
           "influence": 2
-        }
+        },
+        "depts": [
+          "팔로알토"
+        ]
       },
       {
         "id": "237c73ba-dbb0-4b0f-a84a-becc0233681a",
@@ -334,7 +359,10 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0
-        }
+        },
+        "depts": [
+          "팔로알토"
+        ]
       },
       {
         "id": "ee7d21df-dfd1-4058-97dd-e81114a60292",
@@ -364,7 +392,10 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0
-        }
+        },
+        "depts": [
+          "팔로알토"
+        ]
       },
       {
         "id": "b5c54f91-0a5b-43e8-b0e0-d08a7b4b2faf",
@@ -394,7 +425,10 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0
-        }
+        },
+        "depts": [
+          "팔로알토"
+        ]
       },
       {
         "id": "07d3e635-50b9-4d22-b32b-952d16e93d99",
@@ -424,7 +458,10 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0
-        }
+        },
+        "depts": [
+          "팔로알토"
+        ]
       },
       {
         "id": "3de1c80b-ce48-40b7-b758-dd4f127c153c",
@@ -454,9 +491,12 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0
-        }
+        },
+        "depts": [
+          "팔로알토"
+        ]
       }
     ]
   },
-  "savedAt": "2026-08-28T00:59:21.682Z"
+  "savedAt": "2026-08-28T01:19:55.371Z"
 }
