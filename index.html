@@ -36,13 +36,8 @@
     <div class="year-tabs" id="yearTabs"></div>
     <div class="btn-group">
       <div class="gh-status" id="ghStatus"><span class="gh-dot" id="ghDot"></span><span id="ghStatusText">GitHub 미연결</span></div>
-      <button class="btn" id="btnGhConnect">🔗 GitHub 연결</button>
-      <button class="btn" id="btnGhLoad">⬇ GitHub에서 불러오기</button>
+      <button class="btn" id="btnGhSync">🔗 GitHub 동기화</button>
       <button class="btn primary" id="btnGhSave">⬆ GitHub에 저장</button>
-      <button class="btn" id="btnWeights">⚙ 배점 설정</button>
-      <button class="btn small" id="btnExport">JSON 백업 내려받기</button>
-      <button class="btn small" id="btnImportTrigger">JSON 백업 불러오기</button>
-      <input type="file" id="btnImport" accept="application/json">
       <button class="btn primary" id="btnAddMember">+ 팀원 추가</button>
     </div>
   </div>
@@ -64,9 +59,9 @@
 </div>
 
 <footer class="note">
-  <b>사용 방법</b> · 점수 칸은 클릭해서 직접 수정할 수 있고, 별점을 바꾸면 해당 항목 점수가 배점 가중치에 따라 자동 계산되어 채워집니다(이후 직접 값을 덮어써도 됩니다).
-  <b>⬆ GitHub에 저장</b>을 누르면 지금 화면의 모든 데이터가 저장소의 데이터 파일에 직접 커밋됩니다. 다른 브라우저·다른 사람이 접속했을 때는
-  <b>⬇ GitHub에서 불러오기</b>로 최신 데이터를 가져오세요. GitHub 연결이 어렵거나 인터넷이 안 될 때를 대비해 JSON 백업 내려받기/불러오기도 그대로 남겨두었습니다.
+  <b>사용 방법</b> · 점수 칸은 클릭해서 직접 수정할 수 있고, 별점을 바꾸면 해당 항목 점수가 옆의 배점(가중치)에 따라 자동 계산되어 채워집니다(이후 직접 값을 덮어써도 됩니다).
+  각 세부 항목 이름 옆의 <b>×숫자</b> 배점은 클릭하면 바로 수정할 수 있고, 바꾸면 관련 점수가 모든 연도에 걸쳐 다시 계산됩니다.
+  <b>🔗 GitHub 동기화</b>로 연결하면 저장소의 최신 데이터를 바로 불러오고, <b>⬆ GitHub에 저장</b>을 누르면 지금 화면의 모든 데이터가 저장소에 직접 커밋됩니다.
   연도 탭 옆의 + 버튼으로 새 연도를 추가하면 그 해 평가를 별도로 쌓을 수 있습니다.
 </footer>
 
@@ -85,13 +80,12 @@
       <option>선임</option>
       <option>연구원</option>
     </select>
-    <label>담당</label>
-    <select id="mDept">
-      <option value="">담당 미지정</option>
-      <option value="시만텍">시만텍</option>
-      <option value="팔로알토">팔로알토</option>
-      <option value="클라우드플레어">클라우드플레어</option>
-    </select>
+    <label>담당 (여러 개 선택 가능)</label>
+    <div class="modal-checkbox-group" id="mDeptGroup">
+      <label><input type="checkbox" value="시만텍"> 시만텍</label>
+      <label><input type="checkbox" value="팔로알토"> 팔로알토</label>
+      <label><input type="checkbox" value="클라우드플레어"> 클라우드플레어</label>
+    </div>
     <div class="modal-footer">
       <button class="btn" id="mCancel">취소</button>
       <button class="btn primary" id="mSave">저장</button>
@@ -117,33 +111,20 @@
   </div>
 </div>
 
-<!-- Weights modal -->
-<div class="modal-backdrop" id="weightModalBackdrop">
-  <div class="modal" style="max-width:480px;">
-    <h3>배점(가중치) 설정</h3>
-    <p style="font-size:12px;color:var(--ink-soft);margin:-6px 0 4px;">항목 점수 = (별점 가중평균 × 2), 가중치를 바꾸면 자동계산 방식이 바뀝니다.</p>
-    <div class="weight-grid" id="weightGrid"></div>
-    <div class="modal-footer">
-      <button class="btn" id="wCancel">취소</button>
-      <button class="btn primary" id="wSave">저장</button>
-    </div>
-  </div>
-</div>
-
 <!-- GitHub connect modal -->
 <div class="modal-backdrop" id="ghModalBackdrop">
   <div class="modal">
-    <h3>GitHub 연결</h3>
+    <h3>GitHub 동기화</h3>
     <p style="font-size:12px;color:var(--ink-soft);margin:-6px 0 4px;">
       저장소: <b id="ghRepoLabel"></b><br>
       점수를 저장/불러오려면 해당 저장소에 쓰기 권한이 있는 Personal Access Token이 필요합니다.
       토큰은 이 브라우저 탭에서만 잠시 기억되며 저장되지 않으므로, 새로고침하면 다시 입력해야 합니다.
     </p>
     <label>Personal Access Token</label>
-    <input id="ghToken" type="password" placeholder="ghp_ 로 시작하는 토큰 붙여넣기">
+    <input id="ghToken" type="password" placeholder="github_pat_ 로 시작하는 토큰 붙여넣기">
     <div class="modal-footer">
       <button class="btn" id="ghCancel">취소</button>
-      <button class="btn primary" id="ghConnectSave">연결</button>
+      <button class="btn primary" id="ghConnectSave">연결하고 불러오기</button>
     </div>
   </div>
 </div>
@@ -168,11 +149,6 @@
 </div>
 
 <script>
-/* ==================== AUTH & GITHUB CONFIG ====================
-   1) 비밀번호를 바꾸려면: 잠금화면의 "비밀번호를 새로 설정하고 싶어요"를 눌러 해시를 만든 뒤
-      아래 passwordHash 값을 교체하고 다시 커밋/배포하세요.
-   2) owner/repo/path/branch를 실제 저장소 정보로 바꾸세요. 이 값들은 비밀이 아니라
-      "어디에 저장할지" 주소일 뿐이며, 실제 접근 권한은 Personal Access Token이 담당합니다. */
 const AUTH_CONFIG = {
   passwordHash: 'd9042096e540e9231ccd4c188903d80332d42d2991aefa328e6e32226dae1e9d'
 };
@@ -225,7 +201,7 @@ const SEED_2026 = [
 function mk(name, position, attendance, skill, contribution, growth, etc, accident, totalOverride){
   return {
     id: crypto.randomUUID(),
-    name, position, dept:'', memo:'',
+    name, position, depts:[], memo:'',
     accident: accident,
     totalOverride: (typeof totalOverride === 'number') ? totalOverride : null,
     scores: { attendance:null, skill:null, contribution:null, growth:null, etc:null },
@@ -372,8 +348,9 @@ function renderBody(){
   }
 
   let rows = '';
-  const DEPT_OPTIONS = ['', '시만텍', '팔로알토', '클라우드플레어'];
+  const DEPT_OPTIONS = ['시만텍', '팔로알토', '클라우드플레어'];
   members.forEach(m=>{
+    const depts = m.depts || [];
     rows += `<tr data-id="${m.id}">`;
     rows += `<td class="name">
       <div class="name-text">${escapeHtml(m.name)}</div>
@@ -382,10 +359,8 @@ function renderBody(){
           ${['수석','책임','선임','연구원'].map(p=>`<option ${p===m.position?'selected':''}>${p}</option>`).join('')}
         </select>
       </div>
-      <div class="dept-badge" data-dept="${m.dept||''}">
-        <select class="deptSelect" data-id="${m.id}">
-          ${DEPT_OPTIONS.map(d=>`<option value="${d}" ${(m.dept||'')===d?'selected':''}>${d===''?'담당 미지정':d}</option>`).join('')}
-        </select>
+      <div class="dept-chips">
+        ${DEPT_OPTIONS.map(d=>`<button type="button" class="dept-chip${depts.includes(d)?' active':''}" data-id="${m.id}" data-dept="${d}">${d}</button>`).join('')}
       </div></td>`;
 
     CONFIG.categories.forEach(c=>{
@@ -455,10 +430,14 @@ function attachRowEvents(){
       sel.closest('.position-badge').dataset.pos = sel.value;
     });
   });
-  document.querySelectorAll('.deptSelect').forEach(sel=>{
-    sel.addEventListener('change', ()=>{
-      findMember(sel.dataset.id).dept = sel.value;
-      sel.closest('.dept-badge').dataset.dept = sel.value;
+  document.querySelectorAll('.dept-chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const m = findMember(btn.dataset.id);
+      if(!m.depts) m.depts = [];
+      const d = btn.dataset.dept;
+      const idx = m.depts.indexOf(d);
+      if(idx >= 0) m.depts.splice(idx, 1); else m.depts.push(d);
+      btn.classList.toggle('active');
     });
   });
   document.querySelectorAll('.delBtn').forEach(btn=>{
@@ -498,7 +477,7 @@ document.getElementById('btnAddMember').addEventListener('click', ()=>{
   document.getElementById('memberModalTitle').textContent = '팀원 추가';
   document.getElementById('mName').value = '';
   document.getElementById('mPosition').value = '선임';
-  document.getElementById('mDept').value = '';
+  document.querySelectorAll('#mDeptGroup input[type="checkbox"]').forEach(cb=> cb.checked = false);
   memberModal.classList.add('show');
 });
 document.getElementById('mCancel').addEventListener('click', ()=> memberModal.classList.remove('show'));
@@ -506,9 +485,9 @@ document.getElementById('mSave').addEventListener('click', ()=>{
   const name = document.getElementById('mName').value.trim();
   if(!name){ alert('이름을 입력해 주세요.'); return; }
   const position = document.getElementById('mPosition').value;
-  const dept = document.getElementById('mDept').value;
+  const depts = [...document.querySelectorAll('#mDeptGroup input[type="checkbox"]:checked')].map(cb=>cb.value);
   const newMember = {
-    id: crypto.randomUUID(), name, position, dept, memo:'', accident:0, totalOverride:null,
+    id: crypto.randomUUID(), name, position, depts, memo:'', accident:0, totalOverride:null,
     scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
     subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
   };
@@ -532,7 +511,7 @@ document.getElementById('ySave').addEventListener('click', ()=>{
   const source = document.getElementById('ySource').value;
   if(source === 'copy'){
     STATE.years[y] = currentMembers().map(m=>({
-      id: crypto.randomUUID(), name:m.name, position:m.position, dept:m.dept||'', memo:'', accident:0, totalOverride:null,
+      id: crypto.randomUUID(), name:m.name, position:m.position, depts:[...(m.depts||[])], memo:'', accident:0, totalOverride:null,
       scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
       subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
     }));
@@ -542,67 +521,6 @@ document.getElementById('ySave').addEventListener('click', ()=>{
   STATE.currentYear = y;
   yearModal.classList.remove('show');
   renderAll();
-});
-
-/* ==================== WEIGHTS MODAL ==================== */
-const weightModal = document.getElementById('weightModalBackdrop');
-document.getElementById('btnWeights').addEventListener('click', ()=>{
-  const grid = document.getElementById('weightGrid');
-  let html = '';
-  STATE.weights.forEach(c=>{
-    html += `<div class="cat-label">${c.label}</div>`;
-    c.subs.forEach(s=>{
-      html += `<div>${s.label}</div><input type="number" step="0.5" data-cat="${c.key}" data-sub="${s.key}" value="${s.weight}">`;
-    });
-  });
-  grid.innerHTML = html;
-  weightModal.classList.add('show');
-});
-document.getElementById('wCancel').addEventListener('click', ()=> weightModal.classList.remove('show'));
-document.getElementById('wSave').addEventListener('click', ()=>{
-  document.querySelectorAll('#weightGrid input').forEach(inp=>{
-    const cat = STATE.weights.find(c=>c.key===inp.dataset.cat);
-    const sub = cat.subs.find(s=>s.key===inp.dataset.sub);
-    sub.weight = parseFloat(inp.value) || 0;
-  });
-  // recompute all scores across all years since weights changed
-  Object.values(STATE.years).flat().forEach(m=>{
-    CONFIG.categories.forEach(c=> m.scores[c.key] = computeCategoryScore(m, c.key));
-  });
-  weightModal.classList.remove('show');
-  renderAll();
-});
-
-/* ==================== IMPORT / EXPORT ==================== */
-document.getElementById('btnExport').addEventListener('click', ()=>{
-  const payload = { weights: STATE.weights, years: STATE.years, exportedAt: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `team-eval-${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-});
-document.getElementById('btnImportTrigger').addEventListener('click', ()=> document.getElementById('btnImport').click());
-document.getElementById('btnImport').addEventListener('change', (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev)=>{
-    try{
-      const data = JSON.parse(ev.target.result);
-      if(!data.years) throw new Error('형식이 올바르지 않습니다.');
-      if(data.weights) STATE.weights = data.weights;
-      STATE.years = data.years;
-      STATE.currentYear = Object.keys(STATE.years).sort((a,b)=>b-a)[0];
-      renderAll();
-      alert('데이터를 불러왔습니다.');
-    }catch(err){
-      alert('JSON 파일을 읽는 중 오류가 발생했습니다: ' + err.message);
-    }
-    e.target.value = '';
-  };
-  reader.readAsText(file);
 });
 
 /* ==================== AUTH GATE ==================== */
@@ -654,17 +572,14 @@ function setGhStatus(state, text){
 }
 
 const ghModal = document.getElementById('ghModalBackdrop');
-document.getElementById('btnGhConnect').addEventListener('click', ()=>{
-  document.getElementById('ghToken').value = '';
-  ghModal.classList.add('show');
-});
 document.getElementById('ghCancel').addEventListener('click', ()=> ghModal.classList.remove('show'));
-document.getElementById('ghConnectSave').addEventListener('click', ()=>{
+document.getElementById('ghConnectSave').addEventListener('click', async ()=>{
   const t = document.getElementById('ghToken').value.trim();
   if(!t){ alert('토큰을 입력해 주세요.'); return; }
   ghToken = t;
   ghModal.classList.remove('show');
   setGhStatus('on', 'GitHub 연결됨');
+  await doGithubLoad();
 });
 
 function ghUrl(){
@@ -703,6 +618,9 @@ async function githubGetFile(){
   if(!res.ok) throw new Error((json && json.message) || `불러오기 실패 (${res.status})`);
   if(!json) throw new Error('GitHub 응답이 비어 있습니다. GITHUB_CONFIG의 owner/repo/path가 올바른지 확인해 주세요.');
 
+  // The file may exist but be empty or contain non-JSON placeholder text
+  // (e.g. a blank file created manually in the GitHub web UI before the
+  // first real save). Treat that as "no data yet" instead of crashing.
   const raw = (typeof json.content === 'string') ? b64DecodeUtf8(json.content) : '';
   const trimmed = raw.trim();
   if(!trimmed) return { data:null, sha: json.sha };
@@ -736,23 +654,21 @@ async function githubSaveFile(payload, sha){
   return json;
 }
 
-function requireGhToken(){
+function ghConfigOk(){
   if(!ghConfigured()){
     alert('먼저 index.html 안 GITHUB_CONFIG의 owner/repo 값을 실제 저장소 정보로 바꿔주세요 (현재는 예시 값 그대로입니다).');
     return false;
   }
-  if(!ghToken){ alert('먼저 "🔗 GitHub 연결"에서 토큰을 입력해 주세요.'); return false; }
   return true;
 }
 
-document.getElementById('btnGhLoad').addEventListener('click', async ()=>{
-  if(!requireGhToken()) return;
+async function doGithubLoad(){
   setGhStatus('busy', '불러오는 중...');
   try{
     const { data } = await githubGetFile();
     if(!data){
       setGhStatus('on', 'GitHub 연결됨 (파일 없음)');
-      alert('저장소에 아직 데이터 파일이 없습니다. 먼저 "GitHub에 저장"으로 만들어 주세요.');
+      alert('저장소에 아직 데이터 파일이 없습니다. "GitHub에 저장"을 누르면 새로 만들어집니다.');
       return;
     }
     if(data.weights) STATE.weights = data.weights;
@@ -764,10 +680,26 @@ document.getElementById('btnGhLoad').addEventListener('click', async ()=>{
     setGhStatus('on', 'GitHub 연결됨 (오류)');
     alert('불러오기 중 오류: ' + err.message);
   }
+}
+
+// "GitHub 동기화" button: connects (asks for a token the first time this
+// session) and immediately pulls the latest saved data in one step.
+document.getElementById('btnGhSync').addEventListener('click', async ()=>{
+  if(!ghConfigOk()) return;
+  if(!ghToken){
+    document.getElementById('ghToken').value = '';
+    ghModal.classList.add('show');
+    return; // doGithubLoad() runs after the token is submitted, see ghConnectSave above
+  }
+  await doGithubLoad();
 });
 
 document.getElementById('btnGhSave').addEventListener('click', async ()=>{
-  if(!requireGhToken()) return;
+  if(!ghConfigOk()) return;
+  if(!ghToken){
+    alert('먼저 "🔗 GitHub 동기화"로 연결해 주세요.');
+    return;
+  }
   setGhStatus('busy', '저장하는 중...');
   try{
     const { sha } = await githubGetFile();
