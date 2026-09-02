@@ -97,6 +97,22 @@
   </div>
 </div>
 
+<!-- Sub-item (column) modal -->
+<div class="modal-backdrop" id="subModalBackdrop">
+  <div class="modal">
+    <h3>세부 항목 추가</h3>
+    <p style="font-size:12px;color:var(--ink-soft);margin:-6px 0 4px;" id="subModalCatLabel"></p>
+    <label>항목 이름</label>
+    <input id="subLabel" type="text" placeholder="예: 야근">
+    <label>가중치</label>
+    <input id="subWeight" type="number" step="0.5" value="1">
+    <div class="modal-footer">
+      <button class="btn" id="subCancel">취소</button>
+      <button class="btn primary" id="subSave">추가</button>
+    </div>
+  </div>
+</div>
+
 <!-- Event modal -->
 <div class="modal-backdrop" id="eventModalBackdrop">
   <div class="modal">
@@ -297,10 +313,10 @@ function renderHead(){
 
   CONFIG.categories.forEach(c=>{
     const subs = catWeights(c.key);
-    grpHtml += `<th class="grp-${c.cls}" colspan="${subs.length+1}">${c.label}</th>`;
+    grpHtml += `<th class="grp-${c.cls}" colspan="${subs.length+1}">${c.label} <button type="button" class="cat-add-btn" data-cat="${c.key}" title="세부 항목 추가">+</button></th>`;
     subHtml += `<th class="sub-row-score sortable" data-sort-key="${c.key}">${c.label}점수 <span class="sort-arrow" data-key="${c.key}"></span></th>`;
     subs.forEach(s=>{
-      subHtml += `<th>${s.label}<br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
+      subHtml += `<th>${s.label}<button type="button" class="sub-del-btn" data-cat="${c.key}" data-sub="${s.key}" title="이 항목 삭제">✕</button><br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
     });
   });
 
@@ -313,6 +329,35 @@ function renderHead(){
   sub.innerHTML = subHtml;
   attachWeightEditing();
   attachSortHandlers();
+  attachCatColumnHandlers();
+}
+
+function attachCatColumnHandlers(){
+  document.querySelectorAll('.cat-add-btn').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      openSubModal(btn.dataset.cat);
+    });
+  });
+  document.querySelectorAll('.sub-del-btn').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const catKey = btn.dataset.cat, subKey = btn.dataset.sub;
+      const cat = STATE.weights.find(c=>c.key===catKey);
+      if(cat.subs.length <= 1){
+        alert('카테고리에는 세부 항목이 최소 1개 있어야 합니다.');
+        return;
+      }
+      const subLabel = cat.subs.find(s=>s.key===subKey)?.label || '';
+      if(!confirm(`"${subLabel}" 항목을 삭제할까요? 이 항목에 매긴 별점 데이터도 함께 사라집니다.`)) return;
+      cat.subs = cat.subs.filter(s=>s.key!==subKey);
+      Object.values(STATE.years).flat().forEach(m=>{
+        if(m.subs) delete m.subs[subKey];
+        m.scores[catKey] = computeCategoryScore(m, catKey);
+      });
+      renderAll();
+    });
+  });
 }
 
 function attachSortHandlers(){
@@ -540,6 +585,37 @@ function renderAll(){
   renderHead();
   renderBody();
 }
+
+/* ==================== SUB-ITEM (COLUMN) MODAL ==================== */
+const subModal = document.getElementById('subModalBackdrop');
+let subModalCatKey = null;
+
+function openSubModal(catKey){
+  subModalCatKey = catKey;
+  const cat = STATE.weights.find(c=>c.key===catKey);
+  document.getElementById('subModalCatLabel').textContent = `"${cat.label}" 카테고리에 새 세부 항목을 추가합니다.`;
+  document.getElementById('subLabel').value = '';
+  document.getElementById('subWeight').value = '1';
+  subModal.classList.add('show');
+}
+document.getElementById('subCancel').addEventListener('click', ()=> subModal.classList.remove('show'));
+document.getElementById('subSave').addEventListener('click', ()=>{
+  const label = document.getElementById('subLabel').value.trim();
+  const weight = parseFloat(document.getElementById('subWeight').value);
+  if(!label){ alert('항목 이름을 입력해 주세요.'); return; }
+  const cat = STATE.weights.find(c=>c.key===subModalCatKey);
+  const key = 'custom_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  cat.subs.push({ key, label, weight: isNaN(weight) ? 1 : weight });
+  // add this new item (starting at 0) for every member across every year, then recompute
+  Object.values(STATE.years).flat().forEach(m=>{
+    if(!m.subs) m.subs = {};
+    m.subs[key] = 0;
+    m.scores[subModalCatKey] = computeCategoryScore(m, subModalCatKey);
+  });
+  subModal.classList.remove('show');
+  renderAll();
+});
+
 
 /* ==================== EVENT MODAL ==================== */
 const eventModal = document.getElementById('eventModalBackdrop');
