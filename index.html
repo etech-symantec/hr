@@ -93,6 +93,26 @@
   </div>
 </div>
 
+<!-- Event modal -->
+<div class="modal-backdrop" id="eventModalBackdrop">
+  <div class="modal">
+    <h3>이벤트 추가</h3>
+    <label>날짜</label>
+    <input id="evDate" type="date">
+    <label>구분</label>
+    <div class="sentiment-toggle">
+      <button type="button" class="sentiment-btn" id="evPositiveBtn" data-val="positive">👍 긍정</button>
+      <button type="button" class="sentiment-btn" id="evNegativeBtn" data-val="negative">👎 부정</button>
+    </div>
+    <label>내용</label>
+    <textarea id="evText" rows="3" placeholder="어떤 일이 있었는지 적어주세요"></textarea>
+    <div class="modal-footer">
+      <button class="btn" id="evCancel">취소</button>
+      <button class="btn primary" id="evSave">저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- Year modal -->
 <div class="modal-backdrop" id="yearModalBackdrop">
   <div class="modal">
@@ -250,7 +270,7 @@ function renderHead(){
   const grp = document.getElementById('grpRow');
   const sub = document.getElementById('subRow');
 
-  let grpHtml = `<th class="grp-base" rowspan="2" style="min-width:190px;">이름 / 직급 / 담당</th>`;
+  let grpHtml = `<th class="grp-base sticky-col" rowspan="2">이름 / 직급 / 담당</th>`;
   let subHtml = ``;
 
   CONFIG.categories.forEach(c=>{
@@ -265,6 +285,7 @@ function renderHead(){
   grpHtml += `<th class="grp-accident" rowspan="2">사고</th>`;
   grpHtml += `<th class="grp-base" rowspan="2">총점</th>`;
   grpHtml += `<th class="grp-base" rowspan="2">메모</th>`;
+  grpHtml += `<th class="grp-base" rowspan="2" style="min-width:170px;">이벤트</th>`;
   grpHtml += `<th class="grp-base" rowspan="2"></th>`;
 
   grp.innerHTML = grpHtml;
@@ -354,6 +375,17 @@ function renderBody(){
     rows += `<td class="cell-accident"><input class="score-input score-accident" data-id="${m.id}" data-field="accident" type="number" step="0.5" value="${m.accident||0}"></td>`;
     rows += `<td class="total">${totalOf(m)}</td>`;
     rows += `<td><input class="memo-input" data-id="${m.id}" data-field="memo" value="${escapeHtml(m.memo||'')}" placeholder="메모"></td>`;
+    rows += `<td class="events-cell">
+      <div class="event-list">
+        ${(m.events||[]).map(ev=>`<div class="event-line">
+          <span class="event-icon ${ev.sentiment}">${ev.sentiment==='positive'?'👍':'👎'}</span>
+          <span class="event-date">${escapeHtml(ev.date||'')}</span>
+          <span class="event-text">${escapeHtml(ev.text||'')}</span>
+          <button type="button" class="event-del" data-id="${m.id}" data-eid="${ev.id}" title="삭제">✕</button>
+        </div>`).join('')}
+      </div>
+      <button type="button" class="event-add-btn" data-id="${m.id}">+ 이벤트 추가</button>
+    </td>`;
     rows += `<td class="row-actions"><button data-id="${m.id}" class="delBtn" title="삭제">✕</button></td>`;
     rows += `</tr>`;
   });
@@ -404,6 +436,16 @@ function attachRowEvents(){
       findMember(inp.dataset.id).memo = inp.value;
     });
   });
+  document.querySelectorAll('.event-add-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> openEventModal(btn.dataset.id));
+  });
+  document.querySelectorAll('.event-del').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const m = findMember(btn.dataset.id);
+      m.events = (m.events||[]).filter(ev=>ev.id !== btn.dataset.eid);
+      renderBody();
+    });
+  });
   document.querySelectorAll('.posSelect').forEach(sel=>{
     sel.addEventListener('change', ()=>{
       findMember(sel.dataset.id).position = sel.value;
@@ -451,6 +493,44 @@ function renderAll(){
   renderBody();
 }
 
+/* ==================== EVENT MODAL ==================== */
+const eventModal = document.getElementById('eventModalBackdrop');
+let eventTargetId = null;
+let eventSentiment = 'positive';
+
+function openEventModal(memberId){
+  eventTargetId = memberId;
+  eventSentiment = 'positive';
+  document.getElementById('evDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('evText').value = '';
+  document.getElementById('evPositiveBtn').classList.add('active');
+  document.getElementById('evNegativeBtn').classList.remove('active');
+  eventModal.classList.add('show');
+}
+document.getElementById('evPositiveBtn').addEventListener('click', ()=>{
+  eventSentiment = 'positive';
+  document.getElementById('evPositiveBtn').classList.add('active');
+  document.getElementById('evNegativeBtn').classList.remove('active');
+});
+document.getElementById('evNegativeBtn').addEventListener('click', ()=>{
+  eventSentiment = 'negative';
+  document.getElementById('evNegativeBtn').classList.add('active');
+  document.getElementById('evPositiveBtn').classList.remove('active');
+});
+document.getElementById('evCancel').addEventListener('click', ()=> eventModal.classList.remove('show'));
+document.getElementById('evSave').addEventListener('click', ()=>{
+  const date = document.getElementById('evDate').value;
+  const text = document.getElementById('evText').value.trim();
+  if(!date){ alert('날짜를 선택해 주세요.'); return; }
+  if(!text){ alert('이벤트 내용을 입력해 주세요.'); return; }
+  const m = findMember(eventTargetId);
+  if(!m.events) m.events = [];
+  m.events.push({ id: crypto.randomUUID(), date, sentiment: eventSentiment, text });
+  m.events.sort((a,b)=> a.date.localeCompare(b.date));
+  eventModal.classList.remove('show');
+  renderBody();
+});
+
 /* ==================== MEMBER MODAL ==================== */
 const memberModal = document.getElementById('memberModalBackdrop');
 document.getElementById('btnAddMember').addEventListener('click', ()=>{
@@ -467,7 +547,7 @@ document.getElementById('mSave').addEventListener('click', ()=>{
   const position = document.getElementById('mPosition').value;
   const depts = [...document.querySelectorAll('#mDeptGroup input[type="checkbox"]:checked')].map(cb=>cb.value);
   const newMember = {
-    id: crypto.randomUUID(), name, position, depts, memo:'', accident:0, totalOverride:null,
+    id: crypto.randomUUID(), name, position, depts, memo:'', events:[], accident:0, totalOverride:null,
     scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
     subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
   };
@@ -493,7 +573,7 @@ document.getElementById('ySave').addEventListener('click', ()=>{
   const source = document.getElementById('ySource').value;
   if(source === 'copy'){
     STATE.years[y] = currentMembers().map(m=>({
-      id: crypto.randomUUID(), name:m.name, position:m.position, depts:[...(m.depts||[])], memo:'', accident:0, totalOverride:null,
+      id: crypto.randomUUID(), name:m.name, position:m.position, depts:[...(m.depts||[])], memo:'', events:[], accident:0, totalOverride:null,
       scores:{attendance:0,skill:0,contribution:0,growth:0,etc:0},
       subs:{attitude:0,domestic:0,overseas:0,ts:0,performance:0,customer:0,initiative:0,cooperation:0,selfdev:0,cert:0,meeting:0,influence:0}
     }));
