@@ -270,7 +270,8 @@ function renderHead(){
   const grp = document.getElementById('grpRow');
   const sub = document.getElementById('subRow');
 
-  let grpHtml = `<th class="grp-base sticky-col" rowspan="2">이름 / 직급 / 담당</th>`;
+  let grpHtml = `<th class="grp-base sticky-col col-name" rowspan="2">이름 / 직급 / 담당</th>`;
+  grpHtml += `<th class="grp-base sticky-col col-total" rowspan="2">총점</th>`;
   let subHtml = ``;
 
   CONFIG.categories.forEach(c=>{
@@ -283,7 +284,6 @@ function renderHead(){
   });
 
   grpHtml += `<th class="grp-accident" rowspan="2">사고</th>`;
-  grpHtml += `<th class="grp-base" rowspan="2">총점</th>`;
   grpHtml += `<th class="grp-base" rowspan="2">메모</th>`;
   grpHtml += `<th class="grp-base" rowspan="2" style="min-width:280px;">이벤트</th>`;
   grpHtml += `<th class="grp-base" rowspan="2"></th>`;
@@ -351,7 +351,7 @@ function renderBody(){
   members.forEach(m=>{
     const depts = m.depts || [];
     rows += `<tr data-id="${m.id}">`;
-    rows += `<td class="name sticky-col">
+    rows += `<td class="name sticky-col col-name">
       <div class="name-row">
         <span class="name-text">${escapeHtml(m.name)}</span>
         <div class="position-badge" data-pos="${m.position}">
@@ -363,6 +363,7 @@ function renderBody(){
       <div class="dept-chips">
         ${DEPT_OPTIONS.map(d=>`<button type="button" class="dept-chip${depts.includes(d)?' active':''}" data-id="${m.id}" data-dept="${d}">${d}</button>`).join('')}
       </div></td>`;
+    rows += `<td class="total sticky-col col-total">${totalOf(m)}</td>`;
 
     CONFIG.categories.forEach(c=>{
       rows += `<td class="cell-${c.cls}"><input class="score-input score-${c.cls}" data-id="${m.id}" data-cat="${c.key}" type="number" step="0.1" value="${m.scores[c.key]}"></td>`;
@@ -373,7 +374,6 @@ function renderBody(){
     });
 
     rows += `<td class="cell-accident"><input class="score-input score-accident" data-id="${m.id}" data-field="accident" type="number" step="0.5" value="${m.accident||0}"></td>`;
-    rows += `<td class="total">${totalOf(m)}</td>`;
     rows += `<td class="memo-cell"><textarea class="memo-input" data-id="${m.id}" data-field="memo" placeholder="메모">${escapeHtml(m.memo||'')}</textarea></td>`;
     rows += `<td class="events-cell">
       <div class="event-list">
