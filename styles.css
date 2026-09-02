@@ -121,9 +121,10 @@
 
   /* ---------- Table wrapper ---------- */
   .table-wrap{
-    max-width:1400px;
+    width:95vw;
+    max-width:95vw;
     margin:22px auto 60px;
-    padding:0 32px;
+    padding:0;
   }
   .table-scroll{
     background:var(--card);
@@ -273,9 +274,11 @@
   .stars span{font-size:14px;color:#dcd6c8;}
   .stars span.on{color:var(--gold);}
 
+  .memo-cell{text-align:left;white-space:normal;vertical-align:top;padding:8px 10px;}
   .memo-input{
-    width:120px;border:1px solid transparent;background:transparent;
+    width:140px;min-height:44px;border:1px solid transparent;background:transparent;
     font-size:12px;padding:4px 6px;border-radius:6px;color:var(--ink-soft);
+    font-family:inherit;resize:vertical;line-height:1.4;display:block;
   }
   .memo-input:hover,.memo-input:focus{border-color:var(--line);background:#fff;outline:none;color:var(--ink);}
 
@@ -322,15 +325,21 @@
   .sentiment-btn.active[data-val="positive"]{background:#e4f5ea;border-color:#8fcda6;color:#1f7a44;}
   .sentiment-btn.active[data-val="negative"]{background:#fbe4e4;border-color:#e79a9a;color:#a3324f;}
 
-  .events-cell{text-align:left;white-space:normal;vertical-align:top;padding:8px 10px;min-width:170px;}
+  .events-cell{text-align:left;white-space:normal;vertical-align:top;padding:8px 10px;min-width:280px;max-width:340px;}
   .event-list{display:flex;flex-direction:column;gap:4px;margin-bottom:6px;}
   .event-line{
     display:flex;align-items:baseline;gap:5px;font-size:11.5px;color:var(--ink);
-    background:#faf9f5;border-radius:6px;padding:3px 6px;
+    background:#faf9f5;border:1px solid var(--line);border-radius:6px;padding:3px 7px;
   }
+  .event-line.positive{background:#eaf7ee;border-color:#a9dcb8;}
+  .event-line.negative{background:#fbeaea;border-color:#e7aeae;}
   .event-icon{flex:0 0 auto;font-size:11px;}
-  .event-date{flex:0 0 auto;color:var(--ink-soft);font-weight:700;font-size:10.5px;white-space:nowrap;}
+  .event-date{flex:0 0 auto;font-weight:700;font-size:10.5px;white-space:nowrap;}
+  .event-line.positive .event-date{color:#2a8a4f;}
+  .event-line.negative .event-date{color:#b3324f;}
   .event-text{flex:1 1 auto;word-break:break-word;}
+  .event-line.positive .event-text{color:#1f6b3d;}
+  .event-line.negative .event-text{color:#932a44;}
   .event-del{
     flex:0 0 auto;border:none;background:transparent;color:#c7c0ac;cursor:pointer;
     font-size:11px;padding:0 2px;
@@ -358,7 +367,6 @@
   @media (max-width:720px){
     header.top{padding:22px 16px 18px;}
     .toolbar{padding:0 16px;}
-    .table-wrap{padding:0 16px;}
     footer.note{padding:0 16px;}
   }
 
