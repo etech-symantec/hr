@@ -19,6 +19,11 @@
           "key": "overseas",
           "label": "해외출장",
           "weight": 0.5
+        },
+        {
+          "key": "custom_mtjsxr74mrf6",
+          "label": "상주",
+          "weight": 0.5
         }
       ]
     },
@@ -107,7 +112,7 @@
         "accident": -2,
         "totalOverride": 88.5,
         "scores": {
-          "attendance": 10,
+          "attendance": 9.1,
           "skill": 7.6,
           "contribution": 6,
           "growth": 7.3,
@@ -125,7 +130,8 @@
           "selfdev": 1,
           "cert": 5,
           "meeting": 3,
-          "influence": 2
+          "influence": 2,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "시만텍",
@@ -156,7 +162,7 @@
         "accident": 0,
         "totalOverride": 56.5,
         "scores": {
-          "attendance": 8.8,
+          "attendance": 8,
           "skill": 6.4,
           "contribution": 6,
           "growth": 4.7,
@@ -173,7 +179,8 @@
           "selfdev": 1,
           "cert": 3,
           "meeting": 2,
-          "influence": 2
+          "influence": 2,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "시만텍"
@@ -188,7 +195,7 @@
         "accident": 0,
         "totalOverride": 63.5,
         "scores": {
-          "attendance": 9,
+          "attendance": 8.2,
           "skill": 7.6,
           "contribution": 6,
           "growth": 2,
@@ -205,7 +212,8 @@
           "selfdev": 1,
           "cert": 1,
           "meeting": 2,
-          "influence": 4
+          "influence": 4,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "시만텍"
@@ -220,7 +228,7 @@
         "accident": 0,
         "totalOverride": 60,
         "scores": {
-          "attendance": 7.4,
+          "attendance": 6.7,
           "skill": 5.2,
           "contribution": 9,
           "growth": 4.7,
@@ -238,7 +246,8 @@
           "selfdev": 3,
           "cert": 2,
           "meeting": 2,
-          "influence": 5
+          "influence": 5,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "시만텍",
@@ -254,7 +263,7 @@
         "accident": 0,
         "totalOverride": 63.5,
         "scores": {
-          "attendance": 8.8,
+          "attendance": 8,
           "skill": 7.2,
           "contribution": 6,
           "growth": 2,
@@ -272,7 +281,8 @@
           "selfdev": 1,
           "cert": 1,
           "meeting": 3,
-          "influence": 4
+          "influence": 4,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "시만텍"
@@ -287,7 +297,7 @@
         "accident": 0,
         "totalOverride": 49,
         "scores": {
-          "attendance": 2,
+          "attendance": 1.8,
           "skill": 6.4,
           "contribution": 7,
           "growth": 2,
@@ -305,7 +315,8 @@
           "selfdev": 1,
           "cert": 1,
           "meeting": 3,
-          "influence": 4
+          "influence": 4,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "시만텍",
@@ -321,7 +332,7 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 8,
+          "attendance": 7.3,
           "skill": 10,
           "contribution": 10,
           "growth": 0,
@@ -339,7 +350,8 @@
           "selfdev": 0,
           "cert": 0,
           "meeting": 2,
-          "influence": 2
+          "influence": 2,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "팔로알토"
@@ -354,7 +366,7 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 8,
+          "attendance": 7.3,
           "skill": 8.8,
           "contribution": 0,
           "growth": 0,
@@ -372,7 +384,8 @@
           "selfdev": 0,
           "cert": 0,
           "meeting": 0,
-          "influence": 0
+          "influence": 0,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "팔로알토"
@@ -387,7 +400,7 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 8,
+          "attendance": 7.3,
           "skill": 6.4,
           "contribution": 0,
           "growth": 0,
@@ -405,7 +418,8 @@
           "selfdev": 0,
           "cert": 0,
           "meeting": 0,
-          "influence": 0
+          "influence": 0,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "팔로알토"
@@ -420,7 +434,7 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 8,
+          "attendance": 7.3,
           "skill": 7.2,
           "contribution": 0,
           "growth": 0,
@@ -438,7 +452,8 @@
           "selfdev": 0,
           "cert": 0,
           "meeting": 0,
-          "influence": 0
+          "influence": 0,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "팔로알토"
@@ -453,10 +468,10 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 8,
+          "attendance": 7.3,
           "skill": 4.4,
-          "contribution": 0,
-          "growth": 0,
+          "contribution": 8,
+          "growth": 4.7,
           "etc": 0
         },
         "subs": {
@@ -466,12 +481,13 @@
           "ts": 2,
           "performance": 2,
           "customer": 3,
-          "initiative": 0,
-          "cooperation": 0,
-          "selfdev": 0,
-          "cert": 0,
+          "initiative": 4,
+          "cooperation": 4,
+          "selfdev": 3,
+          "cert": 2,
           "meeting": 0,
-          "influence": 0
+          "influence": 0,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "팔로알토"
@@ -486,10 +502,10 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 8,
+          "attendance": 7.3,
           "skill": 4.4,
-          "contribution": 0,
-          "growth": 0,
+          "contribution": 10,
+          "growth": 7.3,
           "etc": 0
         },
         "subs": {
@@ -499,12 +515,13 @@
           "ts": 2,
           "performance": 2,
           "customer": 3,
-          "initiative": 0,
-          "cooperation": 0,
-          "selfdev": 0,
-          "cert": 0,
+          "initiative": 5,
+          "cooperation": 5,
+          "selfdev": 3,
+          "cert": 4,
           "meeting": 0,
-          "influence": 0
+          "influence": 0,
+          "custom_mtjsxr74mrf6": 0
         },
         "depts": [
           "팔로알토"
@@ -512,5 +529,5 @@
       }
     ]
   },
-  "savedAt": "2026-09-02T03:50:33.690Z"
+  "savedAt": "2026-09-02T07:56:02.223Z"
 }
