@@ -226,9 +226,9 @@
         "dept": "팔로알토",
         "memo": "",
         "accident": 0,
-        "totalOverride": 60,
+        "totalOverride": null,
         "scores": {
-          "attendance": 6.7,
+          "attendance": 7.6,
           "skill": 5.2,
           "contribution": 9,
           "growth": 4.7,
@@ -247,11 +247,19 @@
           "cert": 2,
           "meeting": 2,
           "influence": 5,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 5
         },
         "depts": [
           "시만텍",
           "팔로알토"
+        ],
+        "events": [
+          {
+            "id": "38bbf1e5-a194-44a8-a140-cb6fca207d2b",
+            "date": "2026-09-01",
+            "sentiment": "positive",
+            "text": "SEUK 원격 지원 @ 9시"
+          }
         ]
       },
       {
@@ -366,7 +374,7 @@
         "accident": 0,
         "totalOverride": null,
         "scores": {
-          "attendance": 7.3,
+          "attendance": 8.2,
           "skill": 8.8,
           "contribution": 0,
           "growth": 0,
@@ -385,7 +393,7 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 5
         },
         "depts": [
           "팔로알토"
@@ -529,5 +537,5 @@
       }
     ]
   },
-  "savedAt": "2026-09-02T07:56:02.223Z"
+  "savedAt": "2026-09-02T07:57:43.820Z"
 }
