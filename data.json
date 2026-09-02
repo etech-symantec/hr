@@ -97,6 +97,11 @@
           "key": "influence",
           "label": "의사소통/영향력",
           "weight": 1
+        },
+        {
+          "key": "custom_mtjt1tqupvao",
+          "label": "문서화",
+          "weight": 0.5
         }
       ]
     }
@@ -116,7 +121,7 @@
           "skill": 7.6,
           "contribution": 6,
           "growth": 7.3,
-          "etc": 5.3
+          "etc": 4.6
         },
         "subs": {
           "attitude": 5,
@@ -131,7 +136,8 @@
           "cert": 5,
           "meeting": 3,
           "influence": 2,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "시만텍",
@@ -160,13 +166,13 @@
         "dept": "시만텍",
         "memo": "",
         "accident": 0,
-        "totalOverride": 56.5,
+        "totalOverride": null,
         "scores": {
           "attendance": 8,
           "skill": 6.4,
           "contribution": 6,
           "growth": 4.7,
-          "etc": 4
+          "etc": 4.6
         },
         "subs": {
           "attitude": 5,
@@ -180,7 +186,8 @@
           "cert": 3,
           "meeting": 2,
           "influence": 2,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 4
         },
         "depts": [
           "시만텍"
@@ -199,7 +206,7 @@
           "skill": 7.6,
           "contribution": 6,
           "growth": 2,
-          "etc": 5.3
+          "etc": 4.6
         },
         "subs": {
           "attitude": 5,
@@ -213,7 +220,8 @@
           "cert": 1,
           "meeting": 2,
           "influence": 4,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "시만텍"
@@ -232,7 +240,7 @@
           "skill": 5.2,
           "contribution": 9,
           "growth": 4.7,
-          "etc": 6
+          "etc": 5.1
         },
         "subs": {
           "attitude": 4,
@@ -247,7 +255,8 @@
           "cert": 2,
           "meeting": 2,
           "influence": 5,
-          "custom_mtjsxr74mrf6": 5
+          "custom_mtjsxr74mrf6": 5,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "시만텍",
@@ -269,13 +278,13 @@
         "dept": "시만텍",
         "memo": "",
         "accident": 0,
-        "totalOverride": 63.5,
+        "totalOverride": null,
         "scores": {
           "attendance": 8,
           "skill": 7.2,
           "contribution": 6,
           "growth": 2,
-          "etc": 6.7
+          "etc": 7.1
         },
         "subs": {
           "attitude": 5,
@@ -290,7 +299,8 @@
           "cert": 1,
           "meeting": 3,
           "influence": 4,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 5
         },
         "depts": [
           "시만텍"
@@ -309,7 +319,7 @@
           "skill": 6.4,
           "contribution": 7,
           "growth": 2,
-          "etc": 6.7
+          "etc": 5.7
         },
         "subs": {
           "attitude": 1,
@@ -324,7 +334,8 @@
           "cert": 1,
           "meeting": 3,
           "influence": 4,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "시만텍",
@@ -344,7 +355,7 @@
           "skill": 10,
           "contribution": 10,
           "growth": 0,
-          "etc": 4
+          "etc": 3.4
         },
         "subs": {
           "attitude": 5,
@@ -359,7 +370,8 @@
           "cert": 0,
           "meeting": 2,
           "influence": 2,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "팔로알토"
@@ -393,7 +405,8 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0,
-          "custom_mtjsxr74mrf6": 5
+          "custom_mtjsxr74mrf6": 5,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "팔로알토"
@@ -427,7 +440,8 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "팔로알토"
@@ -461,7 +475,8 @@
           "cert": 0,
           "meeting": 0,
           "influence": 0,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "팔로알토"
@@ -495,7 +510,8 @@
           "cert": 2,
           "meeting": 0,
           "influence": 0,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "팔로알토"
@@ -529,7 +545,8 @@
           "cert": 4,
           "meeting": 0,
           "influence": 0,
-          "custom_mtjsxr74mrf6": 0
+          "custom_mtjsxr74mrf6": 0,
+          "custom_mtjt1tqupvao": 0
         },
         "depts": [
           "팔로알토"
@@ -537,5 +554,5 @@
       }
     ]
   },
-  "savedAt": "2026-09-02T07:57:43.820Z"
+  "savedAt": "2026-09-02T07:59:27.636Z"
 }
