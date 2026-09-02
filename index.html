@@ -285,7 +285,7 @@ function renderHead(){
   grpHtml += `<th class="grp-accident" rowspan="2">사고</th>`;
   grpHtml += `<th class="grp-base" rowspan="2">총점</th>`;
   grpHtml += `<th class="grp-base" rowspan="2">메모</th>`;
-  grpHtml += `<th class="grp-base" rowspan="2" style="min-width:170px;">이벤트</th>`;
+  grpHtml += `<th class="grp-base" rowspan="2" style="min-width:280px;">이벤트</th>`;
   grpHtml += `<th class="grp-base" rowspan="2"></th>`;
 
   grp.innerHTML = grpHtml;
@@ -374,11 +374,11 @@ function renderBody(){
 
     rows += `<td class="cell-accident"><input class="score-input score-accident" data-id="${m.id}" data-field="accident" type="number" step="0.5" value="${m.accident||0}"></td>`;
     rows += `<td class="total">${totalOf(m)}</td>`;
-    rows += `<td><input class="memo-input" data-id="${m.id}" data-field="memo" value="${escapeHtml(m.memo||'')}" placeholder="메모"></td>`;
+    rows += `<td class="memo-cell"><textarea class="memo-input" data-id="${m.id}" data-field="memo" placeholder="메모">${escapeHtml(m.memo||'')}</textarea></td>`;
     rows += `<td class="events-cell">
       <div class="event-list">
-        ${(m.events||[]).map(ev=>`<div class="event-line">
-          <span class="event-icon ${ev.sentiment}">${ev.sentiment==='positive'?'👍':'👎'}</span>
+        ${(m.events||[]).map(ev=>`<div class="event-line ${ev.sentiment}">
+          <span class="event-icon">${ev.sentiment==='positive'?'👍':'👎'}</span>
           <span class="event-date">${escapeHtml(ev.date||'')}</span>
           <span class="event-text">${escapeHtml(ev.text||'')}</span>
           <button type="button" class="event-del" data-id="${m.id}" data-eid="${ev.id}" title="삭제">✕</button>
