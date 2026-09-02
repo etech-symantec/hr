@@ -180,6 +180,10 @@
     border:1px solid var(--gold);border-radius:5px;background:#fff;color:var(--ink);
   }
 
+  th.sortable, th.sortable.sub-row-score{cursor:pointer;user-select:none;transition:.15s;}
+  th.sortable:hover{background-color:rgba(255,255,255,.12);}
+  .sort-arrow{display:inline-block;font-size:9px;margin-left:2px;color:var(--gold-soft);}
+
   tbody td{
     padding:8px 8px;
     border-bottom:1px solid var(--line);
