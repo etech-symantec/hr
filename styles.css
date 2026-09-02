@@ -149,6 +149,21 @@
     box-sizing:border-box;
     border-right:2px solid rgba(255,255,255,.35);
   }
+  .cat-add-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:15px;height:15px;line-height:1;margin-left:2px;
+    border:1px solid rgba(255,255,255,.5);border-radius:50%;
+    background:rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:800;
+    cursor:pointer;vertical-align:middle;padding:0;
+  }
+  .cat-add-btn:hover{background:rgba(255,255,255,.32);}
+  .sub-del-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:13px;height:13px;line-height:1;margin-left:4px;
+    border:none;border-radius:50%;background:transparent;
+    color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:0;vertical-align:middle;
+  }
+  .sub-del-btn:hover{color:#ff9a9a;background:rgba(255,255,255,.12);}
   .grp-attendance{background:var(--c-attendance);}
   .grp-skill{background:var(--c-skill);}
   .grp-contribution{background:var(--c-contribution);}
