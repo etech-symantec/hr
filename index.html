@@ -46,6 +46,10 @@
 <div class="table-wrap">
   <div class="table-scroll">
     <table id="mainTable">
+      <colgroup>
+        <col style="width:230px">
+        <col style="width:66px">
+      </colgroup>
       <thead>
         <tr class="grp-row" id="grpRow"></tr>
         <tr class="sub-row" id="subRow"></tr>
@@ -214,9 +218,26 @@ let STATE = {
   currentYear: null
 };
 
+let sortState = { key: null, dir: 'asc' }; // UI-only, not saved to GitHub
+
 /* ==================== HELPERS ==================== */
 function catWeights(catKey){
   return STATE.weights.find(c=>c.key===catKey).subs;
+}
+function sortValue(m, key){
+  if(key === 'name') return m.name || '';
+  if(key === 'total') return totalOf(m);
+  if(key === 'accident') return m.accident || 0;
+  return m.scores[key] ?? 0; // category keys (attendance/skill/contribution/growth/etc)
+}
+function applySort(members){
+  if(!sortState.key) return members;
+  const dir = sortState.dir === 'asc' ? 1 : -1;
+  return [...members].sort((a,b)=>{
+    const va = sortValue(a, sortState.key), vb = sortValue(b, sortState.key);
+    if(typeof va === 'string') return va.localeCompare(vb) * dir;
+    return (va - vb) * dir;
+  });
 }
 function computeCategoryScore(member, catKey){
   const subs = catWeights(catKey);
@@ -270,20 +291,20 @@ function renderHead(){
   const grp = document.getElementById('grpRow');
   const sub = document.getElementById('subRow');
 
-  let grpHtml = `<th class="grp-base sticky-col col-name" rowspan="2">이름 / 직급 / 담당</th>`;
-  grpHtml += `<th class="grp-base sticky-col col-total" rowspan="2">총점</th>`;
+  let grpHtml = `<th class="grp-base sticky-col col-name sortable" data-sort-key="name" rowspan="2">이름 / 직급 / 담당 <span class="sort-arrow" data-key="name"></span></th>`;
+  grpHtml += `<th class="grp-base sticky-col col-total sortable" data-sort-key="total" rowspan="2">총점 <span class="sort-arrow" data-key="total"></span></th>`;
   let subHtml = ``;
 
   CONFIG.categories.forEach(c=>{
     const subs = catWeights(c.key);
     grpHtml += `<th class="grp-${c.cls}" colspan="${subs.length+1}">${c.label}</th>`;
-    subHtml += `<th class="sub-row-score">${c.label}점수</th>`;
+    subHtml += `<th class="sub-row-score sortable" data-sort-key="${c.key}">${c.label}점수 <span class="sort-arrow" data-key="${c.key}"></span></th>`;
     subs.forEach(s=>{
       subHtml += `<th>${s.label}<br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
     });
   });
 
-  grpHtml += `<th class="grp-accident" rowspan="2">사고</th>`;
+  grpHtml += `<th class="grp-accident sortable" data-sort-key="accident" rowspan="2">사고 <span class="sort-arrow" data-key="accident"></span></th>`;
   grpHtml += `<th class="grp-base" rowspan="2">메모</th>`;
   grpHtml += `<th class="grp-base" rowspan="2" style="min-width:280px;">이벤트</th>`;
   grpHtml += `<th class="grp-base" rowspan="2"></th>`;
@@ -291,6 +312,33 @@ function renderHead(){
   grp.innerHTML = grpHtml;
   sub.innerHTML = subHtml;
   attachWeightEditing();
+  attachSortHandlers();
+}
+
+function attachSortHandlers(){
+  document.querySelectorAll('.sortable').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      if(e.target.closest('.weight-badge')) return; // don't trigger sort when editing a weight
+      const key = el.dataset.sortKey;
+      if(sortState.key === key){
+        sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortState.key = key;
+        sortState.dir = 'asc';
+      }
+      updateSortArrows();
+      renderBody();
+    });
+  });
+  updateSortArrows();
+}
+
+function updateSortArrows(){
+  document.querySelectorAll('.sort-arrow').forEach(span=>{
+    span.textContent = (span.dataset.key === sortState.key)
+      ? (sortState.dir === 'asc' ? '▲' : '▼')
+      : '';
+  });
 }
 
 function attachWeightEditing(){
@@ -332,9 +380,9 @@ function attachWeightEditing(){
 
 function renderBody(){
   const tbody = document.getElementById('tbody');
-  const members = currentMembers();
+  let members = currentMembers();
   members.forEach(ensureScores);
-  // sort by total desc for ranking display but keep original order for editing simplicity
+  members = applySort(members);
   if(members.length===0){
     if(!ghToken){
       tbody.innerHTML = `<tr><td colspan="99"><div class="empty-state"><div class="big">GitHub과 연결하면 데이터가 표시됩니다</div>아직 연결되지 않았습니다. 위쪽의 “🔗 GitHub 동기화” 버튼을 눌러 저장된 평가 데이터를 불러오세요.</div></td></tr>`;
