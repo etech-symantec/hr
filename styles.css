@@ -9,16 +9,6 @@
     --gold:#c8912f;
     --gold-soft:#f2e3c6;
 
-    --c-attendance:#1c5f8c;
-    --c-attendance-bg:#e7f0f7;
-    --c-skill:#7a1f3d;
-    --c-skill-bg:#f6e6ec;
-    --c-contribution:#5b3a8c;
-    --c-contribution-bg:#ede6f5;
-    --c-growth:#3d4650;
-    --c-growth-bg:#e8e9eb;
-    --c-etc:#b5651d;
-    --c-etc-bg:#faeada;
     --c-accident:#1e4d3b;
     --c-accident-bg:#e3ede8;
   }
@@ -164,11 +154,7 @@
     color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:0;vertical-align:middle;
   }
   .sub-del-btn:hover{color:#ff9a9a;background:rgba(255,255,255,.12);}
-  .grp-attendance{background:var(--c-attendance);}
-  .grp-skill{background:var(--c-skill);}
-  .grp-contribution{background:var(--c-contribution);}
-  .grp-growth{background:var(--c-growth);}
-  .grp-etc{background:var(--c-etc);}
+  .grp-cat{ /* background-color is set inline per category so new/renamed categories work automatically */ }
   .grp-accident{background:var(--c-accident);}
   .grp-base{background:var(--navy-2);}
 
@@ -192,6 +178,12 @@
   .weight-badge:hover{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.5);}
   .weight-input{
     width:44px;margin-top:2px;padding:1px 4px;font-size:10px;text-align:center;
+    border:1px solid var(--gold);border-radius:5px;background:#fff;color:var(--ink);
+  }
+  .sub-label-edit{cursor:pointer;border-bottom:1px dashed rgba(255,255,255,.35);}
+  .sub-label-edit:hover{color:#fff;border-bottom-color:#fff;}
+  .label-input{
+    width:76px;padding:1px 4px;font-size:11px;text-align:center;
     border:1px solid var(--gold);border-radius:5px;background:#fff;color:var(--ink);
   }
 
@@ -277,24 +269,12 @@
   }
   .score-input:hover{border-color:var(--line);background:#fff;}
   .score-input:focus{border-color:var(--navy);background:#fff;outline:none;}
-  .score-attendance{color:var(--c-attendance);} 
-  .score-skill{color:var(--c-skill);}
-  .score-contribution{color:var(--c-contribution);}
-  .score-growth{color:var(--c-growth);}
-  .score-etc{color:var(--c-etc);}
   .score-accident{color:var(--c-accident);}
 
-  .cell-attendance{background:var(--c-attendance-bg) !important;}
-  .cell-skill{background:var(--c-skill-bg) !important;}
-  .cell-contribution{background:var(--c-contribution-bg) !important;}
-  .cell-growth{background:var(--c-growth-bg) !important;}
-  .cell-etc{background:var(--c-etc-bg) !important;}
+  /* .cell-cat's background-color comes from an inline style per category,
+     so add/rename/delete of 대분류 categories works without touching CSS. */
   .cell-accident{background:var(--c-accident-bg) !important;}
-  tbody tr:hover td.cell-attendance{background:#dcebf5 !important;}
-  tbody tr:hover td.cell-skill{background:#f0d9e3 !important;}
-  tbody tr:hover td.cell-contribution{background:#e2d6f0 !important;}
-  tbody tr:hover td.cell-growth{background:#dbdde0 !important;}
-  tbody tr:hover td.cell-etc{background:#f5deb9 !important;}
+  tbody tr:hover td.cell-cat{filter:brightness(0.95);}
   tbody tr:hover td.cell-accident{background:#d3e3da !important;}
 
   .stars{display:inline-flex;gap:1px;cursor:pointer;user-select:none;}
