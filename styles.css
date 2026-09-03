@@ -134,19 +134,27 @@
     font-size:12px;
     font-weight:800;
     letter-spacing:.02em;
-    padding:8px 6px;
-    height:34px;
+    padding:4px 6px;
+    height:36px;
     box-sizing:border-box;
     border-right:2px solid rgba(255,255,255,.35);
   }
   .cat-add-btn{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:15px;height:15px;line-height:1;margin-left:2px;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:15px;height:15px;line-height:1;
     border:1px solid rgba(255,255,255,.5);border-radius:50%;
     background:rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:800;
-    cursor:pointer;vertical-align:middle;padding:0;
+    cursor:pointer;padding:0;
   }
   .cat-add-btn:hover{background:rgba(255,255,255,.32);}
+  .cat-del-btn{
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    width:15px;height:15px;line-height:1;
+    border:1px solid rgba(255,255,255,.5);border-radius:50%;
+    background:rgba(255,255,255,.12);color:#fff;font-size:9px;
+    cursor:pointer;padding:0;
+  }
+  .cat-del-btn:hover{background:rgba(255,80,80,.45);}
   .sub-del-btn{
     display:inline-flex;align-items:center;justify-content:center;
     width:13px;height:13px;line-height:1;margin-left:4px;
@@ -154,7 +162,12 @@
     color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:0;vertical-align:middle;
   }
   .sub-del-btn:hover{color:#ff9a9a;background:rgba(255,255,255,.12);}
-  .grp-cat{ /* background-color is set inline per category so new/renamed categories work automatically */ }
+  .grp-cat{padding:0 !important;} /* layout is handled entirely by .grp-cat-inner below */
+  .grp-cat-inner{
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    height:36px;box-sizing:border-box;padding:4px 6px;
+    white-space:nowrap;overflow:hidden;
+  }
   .grp-accident{background:var(--c-accident);}
   .grp-base{background:var(--navy-2);}
 
@@ -167,7 +180,7 @@
     text-align:center;
     white-space:nowrap;
     position:sticky;
-    top:34px;
+    top:36px;
     border-right:1px solid rgba(255,255,255,.12);
   }
   .weight-badge{
