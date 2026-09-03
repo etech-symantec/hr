@@ -341,11 +341,7 @@ function renderHead(){
 
   STATE.weights.forEach(c=>{
     const subs = c.subs;
-    grpHtml += `<th class="grp-cat" style="background:${c.color};" colspan="${subs.length+1}">
-      ${c.label}
-      <button type="button" class="cat-add-btn" data-cat="${c.key}" title="세부 항목 추가">+</button>
-      <button type="button" class="cat-del-btn" data-cat="${c.key}" title="이 카테고리 삭제">🗑</button>
-    </th>`;
+    grpHtml += `<th class="grp-cat" style="background:${c.color};" colspan="${subs.length+1}"><div class="grp-cat-inner">${c.label}<button type="button" class="cat-add-btn" data-cat="${c.key}" title="세부 항목 추가">+</button><button type="button" class="cat-del-btn" data-cat="${c.key}" title="이 카테고리 삭제">🗑</button></div></th>`;
     subHtml += `<th class="sub-row-score sortable" data-sort-key="${c.key}">${c.label}점수 <span class="sort-arrow" data-key="${c.key}"></span></th>`;
     subs.forEach(s=>{
       subHtml += `<th><span class="sub-label-edit" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 이름 수정">${s.label}</span><button type="button" class="sub-del-btn" data-cat="${c.key}" data-sub="${s.key}" title="이 항목 삭제">✕</button><br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
