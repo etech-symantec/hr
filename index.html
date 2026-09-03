@@ -38,6 +38,7 @@
       <div class="gh-status" id="ghStatus"><span class="gh-dot" id="ghDot"></span><span id="ghStatusText">GitHub 미연결</span></div>
       <button class="btn" id="btnGhSync">🔗 GitHub 동기화</button>
       <button class="btn primary" id="btnGhSave">⬆ GitHub에 저장</button>
+      <button class="btn" id="btnAddCategory">+ 대분류 추가</button>
       <button class="btn primary" id="btnAddMember">+ 팀원 추가</button>
     </div>
   </div>
@@ -93,6 +94,23 @@
     <div class="modal-footer">
       <button class="btn" id="mCancel">취소</button>
       <button class="btn primary" id="mSave">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- Category (대분류) modal -->
+<div class="modal-backdrop" id="catModalBackdrop">
+  <div class="modal">
+    <h3>대분류 추가</h3>
+    <p style="font-size:12px;color:var(--ink-soft);margin:-6px 0 4px;">
+      새 대분류를 만들면 "기본 항목"이라는 세부 항목 1개와 함께 시작됩니다.
+      이후 카테고리 헤더의 + 버튼으로 세부 항목을 더 추가할 수 있습니다.
+    </p>
+    <label>대분류 이름</label>
+    <input id="catLabelInput" type="text" placeholder="예: 리더십">
+    <div class="modal-footer">
+      <button class="btn" id="catCancel">취소</button>
+      <button class="btn primary" id="catSave">추가</button>
     </div>
   </div>
 </div>
@@ -202,25 +220,25 @@ const GITHUB_CONFIG = {
 /* ==================== CONFIG ==================== */
 const CONFIG = {
   categories: [
-    { key:'attendance',   label:'근태',        cls:'attendance',   subs:[
+    { key:'attendance',   label:'근태',        color:'#1c5f8c', bg:'#e7f0f7', subs:[
         {key:'attitude', label:'근태', weight:4},
         {key:'domestic', label:'국내출장', weight:0.5},
         {key:'overseas', label:'해외출장', weight:0.5}
     ]},
-    { key:'skill',        label:'기술력(개인)', cls:'skill',        subs:[
+    { key:'skill',        label:'기술력(개인)', color:'#7a1f3d', bg:'#f6e6ec', subs:[
         {key:'ts', label:'기술력/TS', weight:3},
         {key:'performance', label:'실적/성과', weight:1},
         {key:'customer', label:'고객관리', weight:1}
     ]},
-    { key:'contribution', label:'기여도',      cls:'contribution', subs:[
+    { key:'contribution', label:'기여도',      color:'#5b3a8c', bg:'#ede6f5', subs:[
         {key:'initiative', label:'업무주도성/기여도', weight:2},
         {key:'cooperation', label:'협력/지원', weight:2}
     ]},
-    { key:'growth',       label:'자기계발',    cls:'growth',       subs:[
+    { key:'growth',       label:'자기계발',    color:'#3d4650', bg:'#e8e9eb', subs:[
         {key:'selfdev', label:'자기계발', weight:1},
         {key:'cert', label:'자격증', weight:2}
     ]},
-    { key:'etc',          label:'기타(팀)',    cls:'etc',          subs:[
+    { key:'etc',          label:'기타(팀)',    color:'#b5651d', bg:'#faeada', subs:[
         {key:'meeting', label:'회의/정보공유', weight:2},
         {key:'influence', label:'의사소통/영향력', weight:1}
     ]}
@@ -228,8 +246,18 @@ const CONFIG = {
   accident: { label:'사고', cls:'accident' }
 };
 
+// Extra colors handed out (in order) to any new 대분류 the user adds at runtime.
+const CATEGORY_PALETTE = [
+  { color:'#2f6f4f', bg:'#e3f0e8' },
+  { color:'#8a3f6b', bg:'#f5e3ee' },
+  { color:'#4a5a8a', bg:'#e6e9f5' },
+  { color:'#8a6d1f', bg:'#f6eed6' },
+  { color:'#1f7a8a', bg:'#dff0f2' },
+  { color:'#7a4a2f', bg:'#f2e5db' },
+];
+
 let STATE = {
-  weights: JSON.parse(JSON.stringify(CONFIG.categories)), // editable copy holding weights
+  weights: JSON.parse(JSON.stringify(CONFIG.categories)), // editable copy: add/remove/rename categories & sub-items here
   years: {},
   currentYear: null
 };
@@ -267,7 +295,7 @@ function computeCategoryScore(member, catKey){
   return Math.round(((sum/wsum) * 2) * 10) / 10; // scale 1-5 stars -> 0-10
 }
 function ensureScores(member){
-  CONFIG.categories.forEach(c=>{
+  STATE.weights.forEach(c=>{
     if(member.scores[c.key] === null || member.scores[c.key] === undefined){
       member.scores[c.key] = computeCategoryScore(member, c.key);
     }
@@ -276,7 +304,7 @@ function ensureScores(member){
 function totalOf(member){
   if(typeof member.totalOverride === 'number') return member.totalOverride;
   let t = 0;
-  CONFIG.categories.forEach(c=> t += (member.scores[c.key]||0));
+  STATE.weights.forEach(c=> t += (member.scores[c.key]||0));
   t += (member.accident||0);
   return Math.round(t*10)/10;
 }
@@ -311,12 +339,16 @@ function renderHead(){
   grpHtml += `<th class="grp-base sticky-col col-total sortable" data-sort-key="total" rowspan="2">총점 <span class="sort-arrow" data-key="total"></span></th>`;
   let subHtml = ``;
 
-  CONFIG.categories.forEach(c=>{
-    const subs = catWeights(c.key);
-    grpHtml += `<th class="grp-${c.cls}" colspan="${subs.length+1}">${c.label} <button type="button" class="cat-add-btn" data-cat="${c.key}" title="세부 항목 추가">+</button></th>`;
+  STATE.weights.forEach(c=>{
+    const subs = c.subs;
+    grpHtml += `<th class="grp-cat" style="background:${c.color};" colspan="${subs.length+1}">
+      ${c.label}
+      <button type="button" class="cat-add-btn" data-cat="${c.key}" title="세부 항목 추가">+</button>
+      <button type="button" class="cat-del-btn" data-cat="${c.key}" title="이 카테고리 삭제">🗑</button>
+    </th>`;
     subHtml += `<th class="sub-row-score sortable" data-sort-key="${c.key}">${c.label}점수 <span class="sort-arrow" data-key="${c.key}"></span></th>`;
     subs.forEach(s=>{
-      subHtml += `<th>${s.label}<button type="button" class="sub-del-btn" data-cat="${c.key}" data-sub="${s.key}" title="이 항목 삭제">✕</button><br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
+      subHtml += `<th><span class="sub-label-edit" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 이름 수정">${s.label}</span><button type="button" class="sub-del-btn" data-cat="${c.key}" data-sub="${s.key}" title="이 항목 삭제">✕</button><br><span class="weight-badge" data-cat="${c.key}" data-sub="${s.key}" title="클릭해서 가중치 수정">×${s.weight}</span></th>`;
     });
   });
 
@@ -328,15 +360,69 @@ function renderHead(){
   grp.innerHTML = grpHtml;
   sub.innerHTML = subHtml;
   attachWeightEditing();
+  attachLabelEditing();
   attachSortHandlers();
   attachCatColumnHandlers();
 }
 
+function attachLabelEditing(){
+  document.querySelectorAll('.sub-label-edit').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const catKey = el.dataset.cat, subKey = el.dataset.sub;
+      const subObj = catWeights(catKey).find(s=>s.key===subKey);
+      const current = subObj.label;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = current;
+      input.className = 'label-input';
+      el.replaceWith(input);
+      input.focus();
+      input.select();
+
+      let done = false;
+      const commit = ()=>{
+        if(done) return;
+        done = true;
+        const val = input.value.trim();
+        subObj.label = val || current;
+        renderAll();
+      };
+      input.addEventListener('blur', commit);
+      input.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){ input.blur(); }
+        if(e.key === 'Escape'){ done = true; renderAll(); }
+      });
+    });
+  });
+}
+  
 function attachCatColumnHandlers(){
   document.querySelectorAll('.cat-add-btn').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
       openSubModal(btn.dataset.cat);
+    });
+  });
+  document.querySelectorAll('.cat-del-btn').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      if(STATE.weights.length <= 1){
+        alert('카테고리는 최소 1개가 있어야 합니다.');
+        return;
+      }
+      const catKey = btn.dataset.cat;
+      const cat = STATE.weights.find(c=>c.key===catKey);
+      if(!confirm(`"${cat.label}" 카테고리를 삭제할까요? 이 카테고리의 모든 점수/별점 데이터가 함께 사라집니다.`)) return;
+      STATE.weights = STATE.weights.filter(c=>c.key!==catKey);
+      Object.values(STATE.years).flat().forEach(m=>{
+        delete m.scores[catKey];
+        if(m.subs){
+          cat.subs.forEach(s=> delete m.subs[s.key]);
+        }
+      });
+      if(sortState.key === catKey){ sortState.key = null; }
+      renderAll();
     });
   });
   document.querySelectorAll('.sub-del-btn').forEach(btn=>{
@@ -458,11 +544,10 @@ function renderBody(){
       </div></td>`;
     rows += `<td class="total sticky-col col-total">${totalOf(m)}</td>`;
 
-    CONFIG.categories.forEach(c=>{
-      rows += `<td class="cell-${c.cls}"><input class="score-input score-${c.cls}" data-id="${m.id}" data-cat="${c.key}" type="number" step="0.1" value="${m.scores[c.key]}"></td>`;
-      const subs = catWeights(c.key);
-      subs.forEach(s=>{
-        rows += `<td class="cell-${c.cls}"><span class="stars" data-id="${m.id}" data-sub="${s.key}" data-cat="${c.key}">${starsHtml(m.subs[s.key]||0)}</span></td>`;
+    STATE.weights.forEach(c=>{
+      rows += `<td class="cell-cat" style="background:${c.bg};"><input class="score-input" style="color:${c.color};" data-id="${m.id}" data-cat="${c.key}" type="number" step="0.1" value="${m.scores[c.key]}"></td>`;
+      c.subs.forEach(s=>{
+        rows += `<td class="cell-cat" style="background:${c.bg};"><span class="stars" data-id="${m.id}" data-sub="${s.key}" data-cat="${c.key}">${starsHtml(m.subs[s.key]||0)}</span></td>`;
       });
     });
 
@@ -585,6 +670,33 @@ function renderAll(){
   renderHead();
   renderBody();
 }
+
+/* ==================== CATEGORY (대분류) MODAL ==================== */
+const catModal = document.getElementById('catModalBackdrop');
+document.getElementById('btnAddCategory').addEventListener('click', ()=>{
+  document.getElementById('catLabelInput').value = '';
+  catModal.classList.add('show');
+});
+document.getElementById('catCancel').addEventListener('click', ()=> catModal.classList.remove('show'));
+document.getElementById('catSave').addEventListener('click', ()=>{
+  const label = document.getElementById('catLabelInput').value.trim();
+  if(!label){ alert('대분류 이름을 입력해 주세요.'); return; }
+  const key = 'cat_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  const palette = CATEGORY_PALETTE[STATE.weights.length % CATEGORY_PALETTE.length];
+  const defaultSubKey = key + '_default';
+  STATE.weights.push({
+    key, label,
+    color: palette.color, bg: palette.bg,
+    subs: [{ key: defaultSubKey, label:'기본 항목', weight:1 }]
+  });
+  Object.values(STATE.years).flat().forEach(m=>{
+    if(!m.subs) m.subs = {};
+    m.subs[defaultSubKey] = 0;
+    m.scores[key] = 0;
+  });
+  catModal.classList.remove('show');
+  renderAll();
+});
 
 /* ==================== SUB-ITEM (COLUMN) MODAL ==================== */
 const subModal = document.getElementById('subModalBackdrop');
