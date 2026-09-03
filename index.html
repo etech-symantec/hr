@@ -256,6 +256,19 @@ const CATEGORY_PALETTE = [
   { color:'#7a4a2f', bg:'#f2e5db' },
 ];
 
+function normalizeWeights(weights){
+  return (weights || []).map((c, i) => {
+    if(c.color && c.bg) return c;
+    const builtin = CONFIG.categories.find(dc => dc.key === c.key);
+    const fallback = CATEGORY_PALETTE[i % CATEGORY_PALETTE.length];
+    return {
+      ...c,
+      color: c.color || (builtin ? builtin.color : fallback.color),
+      bg: c.bg || (builtin ? builtin.bg : fallback.bg),
+    };
+  });
+}
+
 let STATE = {
   weights: JSON.parse(JSON.stringify(CONFIG.categories)), // editable copy: add/remove/rename categories & sub-items here
   years: {},
@@ -965,7 +978,7 @@ async function doGithubLoad(){
       alert('저장소에 아직 데이터 파일이 없습니다. "GitHub에 저장"을 누르면 새로 만들어집니다.');
       return;
     }
-    if(data.weights) STATE.weights = data.weights;
+    if(data.weights) STATE.weights = normalizeWeights(data.weights);
     STATE.years = data.years;
     STATE.currentYear = Object.keys(STATE.years).sort((a,b)=>b-a)[0];
     renderAll();
